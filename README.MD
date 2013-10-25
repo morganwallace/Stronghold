@@ -1,1 +1,1 @@
-We are making a arduino device capable of saving data to a database
+We are making a Arduino device capable of saving data to a database.
