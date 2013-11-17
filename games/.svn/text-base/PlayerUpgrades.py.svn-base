@@ -1,0 +1,246 @@
+#FB: Fighter Blocking
+#FC: Fighter Cost
+#FD: Fighter Damage
+#FH: Fighter Health
+#FR: Fighter Range
+#PC: Player Chain
+#PH: Player Health
+#PM: Player Money
+#RB: Ranger Blocking
+#RC: Ranger Cost
+#RD: Ranger Damage
+#RH: Ranger Health
+#RR: Ranger Range
+#TA: Tower Access
+#TB: Tower Blocking
+#TD: Tower Damage
+#TH: Tower Health
+#TL: Tower Life (Health Percent)
+#TR: Tower Range
+#TS: Tower Speed
+
+class PlayerUpgrade:
+    @classmethod
+    def doBeforeSelect(self,player):
+        pass
+
+# Basic Maps grant an extra tower and some significant package of boni
+
+class Basic0(PlayerUpgrade):
+    name = "+1 Tower; +2 HP and +5% Cost to Selected Tower; +1 Starting Credit"
+    selectTower = 1
+    @classmethod
+    def doBeforeSelect(self,player):
+        player.modDict["towerNum"] += 1
+    @classmethod
+    def load(self,player,tower):
+        player.modDict["towerNum"] += 1
+        player.modDict['tower'][tower]['CostMod'] += -0.05
+        player.modDict['tower'][tower]['HPBonus'] += 2
+        player.money += 1
+
+class Basic1(PlayerUpgrade):
+    name = "+1 Tower; +10% Damage, +10% Speed, and +10% Cost to Selected Tower; +1 Starting Credit"
+    selectTower = 1
+    @classmethod
+    def doBeforeSelect(self,player):
+        player.modDict["towerNum"] += 1
+    @classmethod
+    def load(self,player,tower):
+        player.modDict["towerNum"] += 1
+        player.modDict['tower'][tower]['CostMod'] += -0.10
+        player.modDict['tower'][tower]['DamageMod'] += 0.10
+        player.modDict['tower'][tower]['SpeedMod'] += 0.10
+        player.money += 1
+
+class Basic2(PlayerUpgrade):
+    name = "+1 Tower; +3 Armor Class, +15% Range, +15% HP, and +15% Cost to Selected Tower; +1 Starting Credit"
+    selectTower = 1
+    @classmethod
+    def doBeforeSelect(self,player):
+        player.modDict["towerNum"] += 1
+    @classmethod
+    def load(self,player,tower):
+        player.modDict["towerNum"] += 1
+        player.modDict['tower'][tower]['CostMod'] += -0.15
+        player.modDict['tower'][tower]['ACBonus'] += 3
+        player.modDict['tower'][tower]['RangeMod'] += 0.15
+        player.modDict['tower'][tower]['HPMod'] += 0.15
+        player.money += 1
+
+class Basic3(PlayerUpgrade):
+    name = "+1 Tower; +20% Cost to Selected Tower; +1 Starting Credit"
+    selectTower = 1
+    @classmethod
+    def doBeforeSelect(self,player):
+        player.modDict["towerNum"] += 1
+    @classmethod
+    def load(self,player,tower):
+        player.modDict["towerNum"] += 1
+        player.modDict['tower'][tower]['CostMod'] += -0.20
+        player.money += 1
+        
+# HitPoints Maps grant a chunk of hit points to a tower/towers
+
+class HitPoints0(PlayerUpgrade):
+    name = "+3 HP and +5% Cost to Selected Tower"
+    selectTower = 1
+    @classmethod
+    def load(self,player,tower):
+        player.modDict['tower'][tower]['CostMod'] += -0.05
+        player.modDict['tower'][tower]['HPBonus'] += 3
+
+class HitPoints1(PlayerUpgrade):
+    name = "+1 HP All Towers; +1 HP and +5% Cost to Selected Tower"
+    selectTower = 1
+    @classmethod
+    def load(self,player,tower):
+        player.modDict['tower'][tower]['CostMod'] += -0.05
+        player.modDict['tower'][tower]['HPBonus'] += 1
+        player.modDict['tower'][0]['HPBonus'] += 1
+
+# Ability Maps give towers special abilities
+
+class Ability0(PlayerUpgrade):
+    name = "Heals Towers In Range, -20% Speed, and +20% Cost to Selected Tower"
+    selectTower = 1
+    @classmethod
+    def load(self,player,tower):
+        player.modDict['tower'][tower]['CostMod'] += -0.20
+        player.modDict['tower'][tower]['SpeedMod'] += -0.20
+        player.modDict['tower'][tower]['Abilities'].append("clericHeal")
+
+class Ability1(PlayerUpgrade):
+    name = "Slows Enemies On Hit, -20% Speed, and +10% Cost to Selected Tower"
+    selectTower = 1
+    @classmethod
+    def load(self,player,tower):
+        player.modDict['tower'][tower]['CostMod'] += -0.10
+        player.modDict['tower'][tower]['SpeedMod'] += -0.20
+        player.modDict['tower'][tower]['Abilities'].append("slowHit")
+
+#class TH01:
+#    name = "+1 HP Each Tower"
+#    @classmethod
+#    def load(self,player):
+#        player.modDict['towerHPBonus'] += 1
+#
+#class TL01:
+#    name = "+5% HP Each Tower"
+#    @classmethod
+#    def load(self,player):
+#        player.modDict['towerHPMod'] += 0.05
+#
+#class TA01:
+#    name = "Open Cleric Tower"
+#    @classmethod
+#    def load(self,player):
+#        player.modDict['towerAccess'].append('Cleric')
+#
+#class TA02:
+#    name = "Open Ranger Tower"
+#    @classmethod
+#    def load(self,player):
+#        player.modDict['towerAccess'].append('Ranger')
+#
+#class TB01:
+#    name = "+4% Block For All Towers"
+#    @classmethod
+#    def load(self,player):
+#        player.modDict['towerACBonus'] += 0.8
+#
+#class TD01:
+#    name = "+5% Damage For Towers"
+#    @classmethod
+#    def load(self,player):
+#        player.modDict['towerDamageMod'] += 0.05
+#
+#class FD01:
+#    name = "+5% Damage For Fighter Towers"
+#    @classmethod
+#    def load(self,player):
+#        player.modDict['fighterDamageMod'] += 0.05
+#
+#class FR01:
+#    name = "+5% Range For Fighter Towers"
+#    @classmethod
+#    def load(self,player):
+#        player.modDict['fighterRangeMod'] += 0.05
+#
+#class FH01:
+#    name = "+1 HP For Fighter Towers"
+#    @classmethod
+#    def load(self,player):
+#        player.modDict['fighterHPBonus'] += 1
+#
+#class FB01:
+#    name = "+4% Block For Fighter Towers"
+#    @classmethod
+#    def load(self,player):
+#        player.modDict['fighterACBonus'] += 0.8
+#
+#class FB02:
+#    name = "+6% Block For Fighter Towers"
+#    @classmethod
+#    def load(self,player):
+#        player.modDict['fighterACBonus'] += 1.2
+#
+#class FC01:
+#    name = "-5% Cost For Fighter Towers"
+#    @classmethod
+#    def load(self,player):
+#        player.modDict['fighterCostMod'] += 0.05
+#
+#class TR01:
+#    name = "+5% Range For Towers"
+#    @classmethod
+#    def load(self,player):
+#        player.modDict['towerRangeMod'] += 0.05
+#
+#class PH01:
+#    name = "+1 Health"
+#    @classmethod
+#    def load(self,player):
+#        player.health += 1
+#
+#class PC01:
+#    name = "+1% Max Chain Bonus"
+#    @classmethod
+#    def load(self,player):
+#            player.modDict['chainMax'] += 0.01
+#
+#class PC02:
+#    name = "+1% Max Chain Bonus"
+#    @classmethod
+#    def load(self,player):
+#            player.modDict['chainMax'] += 0.01
+#
+#class PM01:
+#    name = "+2 Starting Credits"
+#    @classmethod
+#    def load(self,player):
+#            player.money += 2
+#
+#class RR01:
+#    name = "+5% Range For Ranger Towers"
+#    @classmethod
+#    def load(self,player):
+#            player.modDict['rangerRangeMod'] += 0.05
+#
+#class RR02:
+#    name = "+5% Range For Ranger Towers"
+#    @classmethod
+#    def load(self,player):
+#            player.modDict['rangerRangeMod'] += 0.05
+#
+#class RH01:
+#    name = "+1 HP For Ranger Towers"
+#    @classmethod
+#    def load(self,player):
+#            player.modDict['rangerHPBonus'] += 1
+#
+#class RD01:
+#    name = "+5% Damage For Ranger Towers"
+#    @classmethod
+#    def load(self,player):
+#            player.modDict['rangerDamageMod'] += 0.05

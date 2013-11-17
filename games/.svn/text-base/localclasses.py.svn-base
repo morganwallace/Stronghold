@@ -1,0 +1,345 @@
+import pygame
+import os
+import sys
+from pygame.locals import *
+from localdefs import *
+import random
+import math
+
+class Enemy():
+    def __init__(self,wave,letter):
+        self.imgindex = int(mapvar.mapdict['wave'+str(wave)+letter][6])
+        self.image = EnemyImageArray[self.imgindex][0]
+        self.curnode = 0
+        self.distance = 0
+        if letter=='a':
+            self.movelist = mapvar.pointmovelists[0][:]
+        elif letter=='b':
+            self.movelist = mapvar.pointmovelists[1][:]
+        elif letter=='c':
+            self.movelist = mapvar.pointmovelists[2][:]
+        elif letter=='d':
+            self.movelist = mapvar.pointmovelists[3][:]
+        self.rect = self.image.get_rect(center=(self.movelist[self.curnode]))
+        enemylist.append(self)
+        self.cost = mapvar.mapdict['wave'+str(wave)+letter][5]
+        self.health = mapvar.mapdict['wave'+str(wave)+letter][2]
+        self.speed = mapvar.mapdict['wave'+str(wave)+letter][3]
+        self.attackBonus = mapvar.mapdict['wave'+str(wave)+letter][7]
+        self.damage = mapvar.mapdict['wave'+str(wave)+letter][8]
+        self.starthealth = self.health
+        self.startspeed = self.speed
+        self.route = 1
+        self.xp = 10.0*int(wave)/int(mapvar.mapdict['wave'+str(wave)+letter][0])
+        self.slowtimers = list()
+        self.holdcentx = self.rect.centerx*1.0
+        self.holdcenty = self.rect.centery*1.0
+        self.poisontimer = None
+        self.armor = mapvar.mapdict['wave'+str(wave)+letter][4]
+        self.currentTargetTimer = self.startTargetTimer = 2.5
+        self.rangesq = (2*squsize)**2
+        self.slowpercent = 1.0
+    def takeTurn(self,frametime,screen):
+        self.move(frametime)
+        self.attack(frametime,screen)
+    def attack(self,frametime,screen):
+        self.currentTargetTimer -= frametime
+        if self.currentTargetTimer<=0:
+            random.shuffle(towerlist)
+            for tower in towerlist:
+                if (self.rect.centerx-tower.rect.centerx)**2+(self.rect.centery-tower.rect.centery)**2<=self.rangesq:
+                    tower.getAttack((random.randint(1,2000)*1.0/100.0)+self.attackBonus,self.damage)
+                    self.currentTargetTimer=self.startTargetTimer
+                    pygame.draw.line(screen,(255,0,0),self.rect.center,tower.rect.center)
+                    return
+    def move(self,frametime):
+        moveamt = frametime
+        for st in self.slowtimers[:]:
+            st.time -= frametime
+            if st.time<=0:
+                self.slowtimers.remove(st)
+            else:
+                moveamt *= st.amt
+        for i in range(int(self.speed*30)):
+            if mapvar.baserect.colliderect(self.rect):
+                enemylist.remove(self)
+                player.health -= 1
+                if player.health<=0:
+                    player.die()
+                mapvar.wavesSinceLoss = 0
+                return
+            if self.rect.center == self.movelist[self.curnode+1]:
+                self.curnode+=1
+            if self.movelist[self.curnode+1][0]>self.rect.centerx:
+                self.distance+=moveamt
+                self.holdcentx+=moveamt
+                self.image = EnemyImageArray[self.imgindex][0]
+                self.rect.centerx = int(self.holdcentx)
+            elif self.movelist[self.curnode+1][0]<self.rect.centerx:
+                self.distance+=moveamt
+                self.holdcentx-=moveamt
+                self.image = EnemyImageArray[self.imgindex][2]
+                self.rect.centerx = int(self.holdcentx)
+            elif self.movelist[self.curnode+1][1]>self.rect.centery:
+                self.distance+=moveamt
+                self.holdcenty+=moveamt
+                self.image = EnemyImageArray[self.imgindex][3]
+                self.rect.centery = int(self.holdcenty)
+            elif self.movelist[self.curnode+1][1]<self.rect.centery:
+                self.distance+=moveamt
+                self.holdcenty-=moveamt
+                self.image = EnemyImageArray[self.imgindex][1]
+                self.rect.centery = int(self.holdcenty)
+    def checkHealth(self):
+        if self.health<=0:
+            self.die()
+    def die(self):
+        explosions.append(self.rect)
+        if self in enemylist:
+            enemylist.remove(self)
+        player.money+=(self.cost)
+        player.gainXP(self.xp)
+        player.currentChain = min(player.modDict['chainMax'],player.currentChain+0.01)
+
+class Tower():
+    def __init__(self,num,tl):
+        self.num = num
+        self.cost = player.modDict['tower'][num]['cost']
+        self.tempimage = imgLoad(os.path.join('towerimgs','Fighter','1.png'))
+        self.image = self.tempimage.copy()
+        self.image.fill((255,255,255,50))
+        self.image.blit(self.tempimage,(0,0))
+        self.targetTimer = 0
+        player.money-=int(self.cost*10)/10.0
+        self.rect = self.image.get_rect(topleft=tl)
+        towerlist.append(self)
+        self.totalspent = self.cost
+        self.abilities = list()
+        self.buttonlist = list()
+        self.upgrades = list()
+        self.reload()
+        self.hp = self.maxhp
+        self.level = 1
+    def reload(self):
+        self.maxhp = player.modDict['tower'][self.num]['maxhp']
+        self.ac = player.modDict['tower'][self.num]['ac']
+        self.range = player.modDict['tower'][self.num]['range']
+        self.rangesq = self.range**2
+        self.damAmt = player.modDict['tower'][self.num]['damAmt']
+        self.startTargetTimer = player.modDict['tower'][self.num]['startTargetTimer']
+        self.abilities = player.modDict['tower'][self.num]['Abilities']
+        self.healamt = player.modDict['tower'][self.num]['healamt']
+        self.slowpercent = player.modDict['tower'][self.num]['slowper']
+        self.slowtime = player.modDict['tower'][self.num]['slowtime']
+    def takeTurn(self,frametime,screen):
+        self.reload()
+        if self.hp>0:
+            self.targetTimer -= frametime
+            if self.targetTimer<=0:
+                enemypoint = self.target()
+                #If the tower shot an enemy, highlight the tower and restart
+                #the turncounter.
+                if enemypoint:
+                    temp = self.image.copy()
+                    temp.fill((255,255,255))
+                    screen.blit(temp,self.rect)
+                    self.targetTimer=self.startTargetTimer
+                    #Enemypoint will be 1 if a slow tower hits (not yet implemented)
+                    #otherwise, if the option is turned on, draw a line from the
+                    #tower to the enemy it hit.
+                    if enemypoint is not 1:
+                        pygame.draw.line(screen,(255,255,255),self.rect.center,enemypoint)
+    def target(self):
+        if "clericHeal" in self.abilities:
+            a = self.healArea()
+        else:
+            a = 0
+        for enemy in sorted(enemylist,key=(lambda x: x.distance),reverse=True):
+            if (self.rect.centerx-enemy.rect.centerx)**2+(self.rect.centery-enemy.rect.centery)**2<=self.rangesq:
+                self.hitEnemy(enemy)
+                enemy.checkHealth()
+                return enemy.rect.center
+        return a
+    def getAttack(self,roll,damage):
+        if roll>=self.ac:
+            self.hp -= damage
+            if self.hp<=-10:
+                towerlist.remove(self)
+    def hitEnemy(self,enemy):
+        enemy.health -= max(self.damAmt-enemy.armor,0)
+        if "slowHit" in self.abilities:
+            enemy.slowtimers.append(SlowTimer(self.slowpercent,self.slowtime))
+    def healArea(self):
+        a = 0
+        for tower in towerlist:
+            if (self.rect.centerx-tower.rect.centerx)**2+(self.rect.centery-tower.rect.centery)**2<=self.rangesq:
+                tower.hp = min(tower.maxhp,tower.hp+self.healamt)
+                a = 1
+        return a
+
+class Icon():
+    def __init__(self,num):
+        self.num = num
+        self.base = "Tower"
+        for i in iconlist:
+            if i.num == num:
+                return
+        iconlist.append(self)
+        try:
+            self.img = imgLoad(os.path.join('towerimgs',type,'1.png'))
+        except:
+            self.img = imgLoad(os.path.join('towerimgs','Basic','1.png'))
+        self.rect = self.img.get_rect(left=len(iconlist)*(25)-20,centery=scrhei-self.img.get_height()+5)
+
+#class FighterTower(Tower):
+#    basecost = 25
+#    baserange = 2*squsize
+#    basedamage = 12.5
+#    basetime = 1.25
+#    basehp = 10.0
+#    baseac = 13.0
+#    def __init__(self,tl):
+#        self.type = "fighter"
+#        self.cost = self.basecost*(1-player.modDict['towerCostMod'])*(1-player.modDict[self.type+'CostMod'])
+#        self.tempimage = imgLoad(os.path.join('towerimgs','Fighter','1.png'))
+#        self.image = self.tempimage.copy()
+#        self.image.fill((255,255,255,50))
+#        self.image.blit(self.tempimage,(0,0))
+#        Tower.__init__(self,tl)
+#    def reload(self):
+#        self.maxhp = (self.basehp*(1+player.modDict['towerHPMod'])*(1+player.modDict[self.type+'HPMod'])+player.modDict['towerHPBonus']+player.modDict[self.type+'HPBonus'])
+#        self.ac = self.baseac+player.modDict['towerACBonus']+player.modDict[self.type+'ACBonus']
+#        self.range = self.baserange*(1+player.modDict['towerRangeMod'])*(1+player.modDict[self.type+'RangeMod'])
+#        self.rangesq = self.range**2
+#        self.damAmt = (self.basedamage)*(1+player.modDict['towerDamageMod'])*(1+player.modDict[self.type+'DamageMod'])
+#        self.startTargetTimer = (self.basetime)*(1-player.modDict['towerSpeedMod'])*(1-player.modDict[self.type+'SpeedMod'])
+#    def damage(self):
+#        return self.damAmt
+#
+#class RangerTower(Tower):
+#    basecost = 35
+#    baserange = 2.5*squsize
+#    basedamage = 10
+#    basetime = 1.25
+#    basehp = 10.0
+#    baseac = 12.0
+#    def __init__(self,tl):
+#        self.type = "ranger"
+#        self.cost = self.basecost*(1-player.modDict['towerCostMod'])*(1-player.modDict[self.type+'CostMod'])
+#        self.tempimage = imgLoad(os.path.join('towerimgs','Fighter','1.png'))
+#        self.image = self.tempimage.copy()
+#        self.image.fill((255,255,255,50))
+#        self.image.blit(self.tempimage,(0,0))
+#        Tower.__init__(self,tl)
+#    def reload(self):
+#        self.maxhp = (self.basehp*(1+player.modDict['towerHPMod'])*(1+player.modDict[self.type+'HPMod'])+player.modDict['towerHPBonus']+player.modDict[self.type+'HPBonus'])
+#        self.ac = self.baseac+player.modDict['towerACBonus']+player.modDict[self.type+'ACBonus']
+#        self.range = self.baserange*(1+player.modDict['towerRangeMod'])*(1+player.modDict[self.type+'RangeMod'])
+#        self.rangesq = self.range**2
+#        self.damAmt = (self.basedamage)*(1+player.modDict['towerDamageMod'])*(1+player.modDict[self.type+'DamageMod'])
+#        self.startTargetTimer = (self.basetime)*(1-player.modDict['towerSpeedMod'])*(1-player.modDict[self.type+'SpeedMod'])
+#    def damage(self):
+#        return self.damAmt
+#    def hitEnemy(self,enemy):
+#        enemy.health -= max(self.damAmt-enemy.armor,0)
+#        if "rangerSlow" in player.modDict['towerAbilities']:
+#            enemy.slowpercent = max(0,1.0-player.modDict['rangerSlowAmount'])
+#
+#class MageTower(Tower):
+#    basecost = 30
+#    baserange = 1.75*squsize
+#    basedamage = 8
+#    basetime = 0.75
+#    basehp = 6.0
+#    baseac = 10.0
+#    def __init__(self,tl):
+#        self.type = "mage"
+#        self.cost = self.basecost*(1-player.modDict['towerCostMod'])*(1-player.modDict[self.type+'CostMod'])
+#        self.tempimage = imgLoad(os.path.join('towerimgs','Mage','1.png'))
+#        self.image = self.tempimage.copy()
+#        self.image.fill((255,255,255,50))
+#        self.image.blit(self.tempimage,(0,0))
+#        Tower.__init__(self,tl)
+#    def reload(self):
+#        self.maxhp = (self.basehp*(1+player.modDict['towerHPMod'])*(1+player.modDict[self.type+'HPMod'])+player.modDict['towerHPBonus']+player.modDict[self.type+'HPBonus'])
+#        self.ac = self.baseac+player.modDict['towerACBonus']+player.modDict[self.type+'ACBonus']
+#        self.range = (self.baserange)*(1+player.modDict['towerRangeMod'])*(1+player.modDict[self.type+'RangeMod'])
+#        self.rangesq = self.range**2
+#        self.damAmt = (self.basedamage)*(1+player.modDict['towerDamageMod'])*(1+player.modDict[self.type+'DamageMod'])
+#        self.startTargetTimer = (self.basetime)*(1-player.modDict['towerSpeedMod'])*(1-player.modDict[self.type+'SpeedMod'])
+#    def damage(self):
+#        return self.damAmt
+#    def fireTakeTurn(self,frametime,screen):
+#        self.reload()
+#        if self.hp>0:
+#            self.targetTimer -= frametime
+#            if self.targetTimer<=0:
+#                if self.fireTarget():
+#                    temp = self.image.copy()
+#                    temp.fill((255,255,255))
+#                    screen.blit(temp,self.rect)
+#                    self.targetTimer=self.startTargetTimer
+#    def fireTarget(self):
+#        a = 0
+#        for enemy in enemylist:
+#            if (self.rect.centerx-enemy.rect.centerx)**2+(self.rect.centery-enemy.rect.centery)**2<=self.rangesq:
+#                self.fireHitEnemy(enemy)
+#                enemy.checkHealth()
+#                for enemy2 in enemylist:
+#                    if enemy != enemy2 and (enemy2.rect.centerx-enemy.rect.centerx)**2+(enemy2.rect.centery-enemy.rect.centery)**2<=self.rangesq:
+#                        self.fireHitEnemy(enemy2)
+#                        enemy2.checkHealth()
+#                a = 1
+#        return a
+#    def fireHitEnemy(self,enemy):
+#        enemy.health -= self.damAmt
+#
+#class ClericTower(Tower):
+#    basecost = 20
+#    baserange = 3*squsize
+#    basedamage = 1
+#    baseheal = 1
+#    basetime = 5
+#    basehp = 8.0
+#    baseac = 12.0
+#    def __init__(self,tl):
+#        self.type = "cleric"
+#        self.cost = self.basecost*(1-player.modDict['towerCostMod'])*(1-player.modDict[self.type+'CostMod'])
+#        self.tempimage = imgLoad(os.path.join('towerimgs','Cleric','1.png'))
+#        self.image = self.tempimage.copy()
+#        self.image.fill((255,255,255,50))
+#        self.image.blit(self.tempimage,(0,0))
+#        Tower.__init__(self,tl)
+#    def reload(self):
+#        self.maxhp = (self.basehp*(1+player.modDict['towerHPMod'])*(1+player.modDict[self.type+'HPMod'])+player.modDict['towerHPBonus']+player.modDict[self.type+'HPBonus'])
+#        self.ac = self.baseac+player.modDict['towerACBonus']+player.modDict[self.type+'ACBonus']
+#        self.range = (self.baserange)*(1+player.modDict['towerRangeMod'])*(1+player.modDict[self.type+'RangeMod'])
+#        self.rangesq = self.range**2
+#        self.healAmt = (self.baseheal)*(1+player.modDict['towerHealMod'])*(1+player.modDict[self.type+'HealMod'])
+#        self.damAmt = (self.basedamage)*(1+player.modDict['towerDamageMod'])*(1+player.modDict[self.type+'DamageMod'])
+#        self.startTargetTimer = (1-player.currentChain)*(self.basetime)*(1-player.modDict[self.type+'SpeedMod'])
+#    def takeTurn(self,frametime,screen):
+#        self.reload()
+#        if self.hp>0:
+#            self.targetTimer -= frametime
+#            if self.targetTimer<=0:
+#                if self.target():
+#                    temp = self.image.copy()
+#                    temp.fill((255,255,255))
+#                    screen.blit(temp,self.rect)
+#                    self.targetTimer=self.startTargetTimer
+#    def target(self):
+#        a = 0
+#        for tower in towerlist:
+#            if (self.rect.centerx-tower.rect.centerx)**2+(self.rect.centery-tower.rect.centery)**2<=self.rangesq:
+#                cur = tower.hp
+#                tower.hp = min(tower.maxhp,tower.hp+self.healAmt)
+#                a = 1
+#        for enemy in enemylist:
+#            if (self.rect.centerx-enemy.rect.centerx)**2+(self.rect.centery-enemy.rect.centery)**2<=self.rangesq:
+#                self.hitEnemy(enemy)
+#                enemy.checkHealth()
+#                a = 1
+#        return a
+#    def hitEnemy(self,enemy):
+#        enemy.health -= self.damAmt

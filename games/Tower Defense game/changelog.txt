@@ -1,0 +1,721 @@
+--------------
+Version 0.8.7b:
+--------------
+[Released: August 27th, 2013]
+*HOTFIX: Player file included.
+
+--------------
+Version 0.8.7a:
+--------------
+[Released: August 27th, 2013]
+*HOTFIX: Crashing upon rewarding rune.
+
+--------------
+Version 0.8.7:
+--------------
+[Released: August 26th, 2013]
+*Player initialization now slightly streamlined.
+*Explosions now display properly and can be changed to last longer/shorter.
+*Added MainFunctions.selectedTower, containing displays/buttons for a selected tower.
+*Removed PlayerUpgradeScreen. Removed PlayerUpgrades.
+*Icons are now initialized by Towers. Icons fit better into the tray.
+*Sections of the screen are now much more easily differentiated.
+*Removed XPBar. Removed player xp.
+*Added an Infobox for enemies. Put your cursor over an enemy to find info about it.
+*Added support for scaling square size. Changed default square size to 30x30.
+*Far and away simplified tower stats. Now all contained in the Tower class, instead of in player.modDict.
+*Added sidebar for tower info/buttons.
+*Added support for enemies having a "level", both a default for the map, as well as adjustments for individual enemies.
+*Massive changes to player class. Removed most of modDict, as no need. Added better support for saving and loading.
+*Adjusted XP modifiers for simplicity and readability.
+*Only the strongest, active slow-timer affects an individual enemy now.
+*Simplified damage function to enemies.
+*Removed multi-placing towers, the cost associated with such, and all references to modDict from Tower class.
+*Removed ability list, button list, and the need for a reload function from Tower class.
+*Added Runes to the game. Towers are simply vessels that use Runes to attack/heal/etc.
+*Added concept and support for "Support" Runes. Runes which improved or change the effects of other runes.
+*Added Rune slots for towers. Only runes in the primary ("Alpha") slot are Active Runes. All others support that Rune.
+*Added support for certain Runes only fitting in certain slots. Each slot will eventually have certain properties.
+*Added support for a "spare runes" list in player object. Included saving and loading of list.
+*Added the save and load functions to the Tower class. Towers placed are actually saved copies of that Tower from previous games.
+*Removed targeting and acting from Towers in accordance with new paradigm.
+*Added the ability to send the next wave by clicking on the "Send Next Wave" text in the top bar.
+*Added support for increasing a Tower's overall stats.
+*Simplified, clarified, and optimized some Event Functions.
+*Changed Tower regeneration to a tower-specific stat.
+*Added Imprints. Small, random bonuses to an individual Rune, rolled when acquired.
+*Added support for Towers, Runes, and Imprints to give bonuses to finding Runes.
+
+--------------
+Version 0.8.6:
+--------------
+[Released: December 16th, 2012]
+*Each Basic map now gives +1 Tower and +5 Starting Money.
+*Added customization options for each Tower's image.
+*Added a main menu, allowing to pick maps from a better interface, as well as
+    edit tower images to your liking. Will also accommodate an options menu, in
+    the future.
+*Added menu functionality for rearranging tower abilities, as well as
+    implemented automatic saving of changes to tower abilities and images.
+*Converted the format for mapproperties.txt files, allowing for ease of entry,
+    as well as multiple different types of enemies in the same wave.
+*Upgrades now rarely modify tower costs. Pumping up towers while increasing base
+    costs was counter-intuitive. Now, each copy of a tower you place increases
+    the cost of further towers of that type. This will incentivize spreading out
+    tower abilities.
+*Enemies now have an element of randomness in their walk.
+*Enemies now rotate their images, based on their temporary destination.
+*Enemy waves now come automatically, after about 10 seconds, if not sent before
+    that.
+*Towers now regenerate health a small amount over time.
+*Maps converted to new format: Basic0, Basic1, Basic2. This means Ability0,
+    Basic3, HitPoints0, and HitPoints1 are UNPLAYABLE!.
+
+**Note On Difficulty: Any BasicX map assumes you have beaten all other X-1 maps.
+    Any other X map assumes that you have beaten BasicX already.**
+
+--------------
+Version 0.8.5:
+--------------
+[Released: November 18th, 2012]
+*Towers are now upgraded based on maps completed. Upon beating a map, if it
+    gives a bonus to a specific tower, it will pull up a selection window. Most
+    upgrades that apply to a specific tower will increase its cost, so a balance
+    is needed between making badass towers and keeping tower costs low.
+*Experience gained during a battle improves all stats of all your towers, and
+    reduces their costs. However, the experience only stays until the end of the
+    current map.
+*The Chain Bonus now goes to battle experience, thus the higher your chain
+    bonus, the quicker your towers will gain their temporary bonuses.
+*Added three new maps.
+
+--------------
+Version 0.8.4:
+--------------
+[Released: NEVER]
+*TODO: Add in Ranger Ability: Slow.
+*Changed block rate to accommodate any percent chance, not just multiples of 5.
+*Changed some locations of Player Upgrades.
+*Added support for giving a percent bonus to towers' HP.
+*Implemented the Ranger tower's ability to slow enemies, as well as other
+    upgrades for it.
+
+--------------
+Version 0.8.3:
+--------------
+[Released: June 15th, 2012]
+*Took the Achievement system back out.
+*Added in an XP bar at the top of the screen. XP per level starts at 10 and
+    increases each level by 50% of the previous level.
+*Implemented support for saving and loading XP states.
+*Added in a Player Upgrade Screen, accessed by right-clicking the XP Bar.
+    Right-click to get out of the Player Upgrade Screen.
+*The Chain Bonus now applies to XP gains instead of tower stats.
+*Tower Upgrade Screen removed, as it is replaced by the Player Upgrade Screen.
+*Player Upgrade requirements implemented. Most player upgrades require at least
+    one other upgrade, shown as a line connecting the two upgrades.
+*Number of available Player Upgrades is shown on top of the XP bar in red.
+*Player Upgrades you currently have are Green. Player Upgrades you qualify for
+    are Blue, or not hued at all if there is an icon image for it. Player
+    Upgrades you do not qualify for are Red.
+*Moved Tower Access over to the Player Upgrade Screen, it is no longer
+    determined by maps completed.
+*Rolled icons over for Player Upgrade Screen.
+*Fixed a bug where losing all a player's lives did not stop them from continuing
+    play.
+*Player.modDict now populates dynamically, making expansion much easier.
+*Killing all enemies in a wave gives 50 plus five times the wave number plus
+    five times the map number XP.
+*Added a new tower: the Ranger; specializing in longer range, medium damage, and
+    slow attack speed. It eventually has the ability to slow enemy units.
+
+--------------
+Version 0.8.2:
+--------------
+[Released: Never]
+*Fixed the tower selling function to accurately return the money spent.
+*Achievement system outline put into place. Not yet operational though. These
+    achievements will provide static, passive bonuses to a variety of things.
+*Towers now display their attack ranges when you move the cursor over them,
+    instead of when they are selected.
+*A tower upgrade screen is now in place. Clicking on a tower pauses the game
+    while you pick upgrades. Selling is also accomplished through this menu.
+*Achievements implemented for Spender and Healer.
+*Now, any upgrade you have earned will show up on a tower's upgrade screen.
+    Those the tower does not qualify for yet will be shown in red. Those it
+    already has are shown in green. Those it will never qualify for (meant for
+    different tower type) are not shown.
+*Added new tower abilities for the Mage tower, as well as the second level of
+    Archer for Fighter towers.
+*Lowered starting money to 25, to compensate for being able to increase it
+    through Player Upgrades.
+
+--------------
+Version 0.8.1:
+--------------
+[Released: April 14th, 2012]
+*Optimized the distance formula for finding enemies within range of a tower.
+*Added a chaining system: the chaining bonus increases by 1% each time an enemy
+    is killed. It decreases automatically over time. Each tower gets a different
+    bonus from a chain: fighter towers gain a damage bonus, archer towers gain
+    a range bonus, and mage towers gain a speed bonus.
+*Fixed an issue with centering enemies on the path.
+*Added hp, maxhp, and ac stats for towers.
+*Added attack bonus and damage stats for enemies.
+*Enemies now attack towers in range, with a similar function to towers.
+*Towers that are at 0HP or below cannot attack until brought above 0HP.
+*Towers that get to -10 HP or below are destroyed.
+*Towers heal at a rate of 1HP per enemy wave.
+*Added the "Cleric" tower. It heals every tower and damages every enemy within
+    range each time it fires. Its damage is unaffected by enemy armor.
+*Lowered player health to 10.
+*Fixed the formula for the location of the text for upgrades when displayed in
+    the radial menu around a tower.
+*Removed some stats from towers that were unused.
+*Corrected a tower's totalspent variable to take into account tower abilities.
+    Now, selling a tower gives you exactly half of everything you spent on it.
+*Changed tower abilities to modify a tower's base variables by a percentage.
+    This way works better when stacking abilities. Certain tower stats will be
+    modified by static amounts, and never by percentages.
+*Added a new line of abilities: specific upgrades that mimic a "class
+    progression" or "level up" in an RPG.
+*All archer mod variables have been removed from the player class.
+*Added support for changing what stat is improved by chaining.
+*Class upgrades, including archetypes, are unlocked by completing levels.
+*Class upgrades increase the tower's level. Towers now heal their level in HP
+    for each wave sent.
+*Added the Negative Cleric archetype, concentrating on area damage by giving up
+    the ability to heal other towers.
+*Switched the Mage tower for the Cleric tower as the second default tower.
+*Changed the current map names to show intended progression better. "Basic0"
+    corresponds to "Simple", and the following "Basic" maps correspond to the
+    "Level" maps. It is recommended you clear you player.txt file.
+*Rewards are now as follows:
+    -Basic0: Gives the option to sell a tower. Allows upgrading a Fighter tower.
+    -Basic1: Allows upgrading Cleric towers. Opens Archer archetype.
+    -Basic2: Allows ExtraDamage1 ability. Opens Mage tower for use.
+    -Basic3: Allows ExtendRange1 ability. Allows the second Fighter tower level.
+
+--------------
+Version 0.8.0:
+--------------
+[Released: March 10, 2012]
+*Added new Archer tower art.
+*Properly implemented the "CostMod" variables.
+*Changed the player levelup system: Player abilities are now determined by the
+    maps they have completed, and the rewards those maps give (see Rewards.py).
+*Save/Load functions, as well as the Player class have been updated for this.
+*Simplified the "player.txt" file as a result.
+*Each map also has a related function in Rewards.py. When loading a player.txt
+    file, each map that player has completed will run its related function from
+    Rewards.py, granting bonuses or new abilities to the player.
+*Changed the completedMaps variable to a set, so multiple wins on the same map
+    will not give multiple bonuses.
+*Modified the maps to be slightly more interesting.
+*Does not save on each new wave, now only saves at the completion of a map.
+*Melded the tower's sell function into "TowerAbilities", so that it may be
+    granted from completing the "Simple" map.
+*As Scores are no longer used, removed all references to them from the code.
+*Removed PlayerUpgradeMenu.py and references.
+*Removed textbox.py. There should be no references.
+*Removed abilities.py and references.
+*Removed functions "addCR" and "addHP" from player class.
+*Added text at the top of the screen telling players to press 'N' to send the
+    next wave.
+*Adjusted the base stats for the two base towers. Both are now the same price,
+    with the Fighter tower doing higher damage at a slower rate and the Archer
+    tower doing low damage at a medium rate with a large range.
+*Added an armored enemy type: "Armor".
+*Added new tower: "Mage". Has high hit rate, average damage, yet very low range.
+*Changed Icon creation so it is a function from player.modDict['towerAccess'],
+    thus allowing giving new towers for winning maps.
+*Corrected some code to allow for correct displaying of tower ranges.
+*Added new Fighter tower art.
+*Added an alpha'd white layer underneath tower images, as they are getting hard
+    to see.
+*TODO: Range is not working correctly!!!
+*Range correctly working now.
+*Got rid of Enemy Types, allowing finer-grained control in mapproperties.txt.
+*Changed out the enemy's path tiles. While the previous looked a bit better,
+    this simplifies path-crossing.
+*Level3 implemented.
+*Changed some tower ability names and filenames.
+*Changed tower abilities so most of them can only be bought once-per-tower. In
+    other words, it's now worthwhile for different maps to grant similar
+    abilities. Note that granting the SAME ability will not do any good.
+*Removed options.txt and references in code. The only option that was even
+    active was the targetline option. It is now hardcoded as active.
+*Removed quite a few unused files from the backgroundimgs folder.
+
+--------------
+Version 0.7.7:
+--------------
+[Released on: January 28, 2011]
+*Added player saving: 's' key. No loading yet, though.
+*Enabled changing of speed: UP arrow increases, DOWN arrow decreases.
+*Implemented a "High Score" mechanism.
+*Added display of "High Score".
+*Added score variable for EnemyTypes.
+*Player class changed around considerably.
+*Loading is implemented and working.
+*Added a Player Upgrade Screen, accessible by pressing 'u'.
+*Changed wave sending to a KEYDOWN event, as per Donpachi's suggestion.
+*Mapmenu changed to disregard files which begin with a period. Due to using svn,
+    a file is created that begins with a period and was showing up in the map
+    list as a playable map... which it wasn't.
+*Curvy map removed, as it was an invalid map from an olllld version.
+
+--------------
+Version 0.7.6:
+--------------
+[To be released on: January 15, 2011]
+[Actually released: January 13, 2011]
+*EventFunctions.leftCheckSelect added to check for clicking on icons or towers.
+*Mouse click events changed so you can select a different tower even when there
+    is already a tower selected.
+*Mouse click events changed so you can left click an empty area to deselect a
+    tower.
+*Towers can be selected directly even with an icon selected.
+*EventFunctions now return True if they had an effect, and False if no actions
+    were taken.
+*Towers no longer print their damage amounts (part of the debugging code was
+    left in, in the last release).
+*EventFunctions.placeTower created to handle placement of towers.
+*EventFunctions.leftSelectedIcon created to check for valid conditions to call
+    placeTower.
+*EventFunctions changed to typically return in the form: selected,XXXb where
+    XXXb is a boolean indicating change, with XXX being the function initials.
+*EventFunctions.leftAlreadySelected created to manage left clicking while having
+    a selected that isn't changing.
+*EventFunctions.mouseButtonUp created to handle entire mouse click event
+    structure.
+*Changed "if" statements in event checklist to "elif" for a (very) slight bump
+    in event speed.
+*EventFunctions.nextWave created to handle the event of asking for next wave.
+*MainFunctions.dispIcons created to handle display of icons.
+*Main event structure slightly reworked to, again, bump the speed very slightly.
+*MainFunctions.workEvents created to completely handle all events.
+*Event structure modified (yet again) to re-enable quitting...
+*Began moving base enemy stats into types: EnemyTypes created.
+*Enemy speed changed to base=1.
+*Type column in mapproperties replaces XP column.
+*Enemy types: Weak (1 cr, half hp) and Healthy (2 cr, 3/4 speed, but high hp).
+*Since enemy cost is now held in EnemyTypes, the Cost column of mapproperties
+    is changed to Time. This is the delay between each enemy in a wave.
+*EnemyType Speedy added: half again cost and speed.
+*Player starts with only 30 cr, towers costs are reduced, tower ability costs
+    reduced.
+*Simple map's mapproperties changed around, possibly balanced (?!?!), and end
+    wave added.
+*localdefs.genEnemyImageArray changed to load different images for each type.
+*Tower abilities now check to see if player has the needed credits to upgrade.
+*Now, when a Tower is selected and showing its abilities as icons, you can move
+    the cursor over an icon and it will display the name and cost/profit for the
+    option.
+*Ability icons' info now is restricted to the screen.
+*Fixed new issue with using upgrades.
+
+--------------
+Version 0.7.5:
+--------------
+[Actually released on: January 9, 2011]
+*Towers and Icons selected now display range as a translucent filled circle
+    instead of simply a lined circle.
+*Towers selected now display their upgrade and sell options as a radial menu
+    set around them instead of listing in boxes to the right.
+*Artwork done for icons for Bonus Damage, Extend Range, and Sell options.
+*Tower.genButtons changed as a result. Simplified.
+*Extra towers removed to work up from simply Fighter and Archer towers.
+*XP completely removed.
+*XP tables/lists removed.
+*Upgrade slots removed.
+*Tower abilities cost changed.
+*Currently both towers qualify for both abilities.
+*Player class given Mod variables for all towers, and for specific types of
+    towers, allowing for extensive customization to take place.
+*Tower stat calculation drastically changed to accomodate Abilities and Player
+    Mod variables.
+*Targeting changed and simplified, though is inconsistent with range displayed.
+*Fighter and Archer base stats changed. Archers are weaker, more expensive, but
+    much quicker to fire.
+*Turns are advanced by the "n" key now.
+*Panel removed, as is now unneeded.
+*PanelClass file removed, as is now unused.
+
+--------------
+Version 0.7.0:
+--------------
+[To be released: Never]
+[Actually released on: Never]
+*Created the MainFunctions file. It holds most of the individual functions
+    called in the main game function. This makes things a whole lot more neat
+    and clean.
+*Created the InterfaceClass file. It will hold the nexttextpos rect and the
+    selected pointer so that they may be passed to MainFunctions and modified.
+*Created the EventFunctions file. It will hold (hopefully) all the individual
+    functions related to the different events in the game.
+*Removed Menus. They aren't needed yet, and don't seem like they ever will be.
+*Removed Buildings. They seemed to add a bit of confusion, especially to the
+    code, while not offering much in-game.
+*Removed the print commands from the PoisonTimer class.
+*Changed how Slow works. Now instead of having a SpeedupTimer that activates
+    after a certain amount of time and moves the enemy's speed back up, each
+    enemy instance keeps however many SlowTimers they need to, and each's
+    duration counts down separately, and the strongest still-active effect is
+    chosen each time the enemy moves. SlowTimers use frames for their timing.
+    This change allows for an enemy to be, say, slowed for 100 frames at 80% of
+    its speed, yet be temporarily slowed for 30 frames at 50% of its speed, and
+    it will speed back up on its own once the 30 runs out.
+*Simple map has been changed to only two enemy paths. Making it more, well,
+    "Simple" lol.
+*Started rewriting class functions to be based on frametime instead of amount of
+    frames.
+*Sender class rewritten to work off frametime.
+*Sender objects are removed from senderlist when they are done. (Why didn't I do
+    this a long time ago?)
+*Towers work off frametime.
+*Enemies work off frametime.
+*Base costs and ranges are class variables now, instead of being held in
+    localdefs.
+*Speed system modified.
+*Upgrades changed to a single level up, not separate things. Each upgrade can
+    increase various stats.
+*Modified to force towers into individual squares.
+*Support for tower ranges based on squares.
+*Tower experience and costs modified.
+*Enemies and towers balanced a little more.
+*PanelClass created to keep track of the majority of the future interface.
+*Moved the Next Wave button into PanelClass....
+*And its actually working now!
+*Exchanged nexttextpos in towerdefence.py for PanelClass.Panel.nexttextpos.
+*Sell button changed and now blitting to the panel. Will move to PanelClass.
+*Moved Upgrade button to blit on the panel, changed as well.
+*Removed printing of tower range height.
+*Added and implemented TowerAbilities.
+
+--------------
+Version 0.5.7:
+--------------
+[To be released by: 5 April, 2010]
+[Actually released on: 1 April, 2010]
+*Wave 11a-20a of Map Simple and Curvy are still not balanced.
+*Updating readme.txt.
+*Adding better documentation for the mapmaker.
+*Added a bit more comments.
+*Introduced feature of towers needing 'power' from a link to the base.
+*Added 'Node' tower, which can extend powered area.
+*'Power' feature removed, too complex at this point.
+*Building class created. This is the backend for any structures that aren't
+    towers.
+*Changed enemy speed from 3 times the speed value in mapproperties to just the
+    value in mapproperties. This allows greater and easier customization of
+    enemies' speed.
+*Fixed bug where map would end if there were only enemies coming from 'c' and/or
+    'd' paths.
+*Hopefully fixed a bug where the next map would load in a small window, but this
+    is unlikely.
+*Fixed the next-map-small-screen bug, but have realized that switching maps is
+    going to be a whole lot more complex than I had expected. I'm declaring that
+    to be a "Not-yet-implemented Feature" for the time being.
+*Minor update to mapmaker: Can't save without a base (avoids a common error).
+    Also, began adding step by step instructions to the top of the screen.
+*Added Poison tower.
+*Enemies will have a green health bar when poisoned.
+
+--------------
+Version 0.5.6:
+--------------
+[Actually released on: 14 March, 2010]
+*Fixed a bug in the map switching / game ending code, which would allow someone
+    to "win" by just clicking "Next Wave".
+*Fixed a common bug where a slow tower would slow down an already slowed enemy,
+    then the enemy would "pop" back to its original speed.
+*Added a map selecting menu. When starting the game, now, a very simple
+    selection menu will come up first. The only playable map at this point is
+    Map '1'.
+*Added an optional description for map files. Simply put a 'description.txt'
+    file in your map's folder to see it come up in map selection.
+*Added support for map names other than numbers (i.e. Map '1' is now named
+    'Simple').
+*MapMaker created!!! Run this separately from the game itself from mapmaker.py.
+*Added a Textbox class, taken primarily from DrakeMagi in the thread:
+    http://www.python-forum.org/pythonforum/viewtopic.php?f=4&t=12895
+    Easily the best implementation I've seen.
+*Wrote Map Maker Guide in the readme.txt.
+*Corrected a bug where enemies would leave the screen and be 'removed', but
+    their .move() function would still run, causing a crash.
+
+--------------
+Version 0.5.5:
+--------------
+*Update graphics from:
+    http://lostgarden.com/2005/03/game-post-mortem-hard-vacuum.html
+    By the way "Danc" thanks for releasing the game art!
+*Added the final two paths for the first map. Still not sure if this is the
+    direction I want to take the game, but it's making it a little more
+    interesting already. Please note, though, that the game is YET AGAIN
+    unbalanced, and incredibly hard to beat thus far.
+*Balanced out an odd skip in enemy stats. I'll look more at these soon.
+*Basic tower is green, slow is blue now...
+*Added the Cannon tower back!
+*Updated the way towers generate their "buttons" to be more versatile... which
+    leaves the door open to a surprise tower I hope to get up and running soon!!
+*Made enemy movement much more fluid! No more "snapping" to corners.
+*All enemy actions contained in Enemy.taketurn() now.
+*Separate moneystolen from enemy.cost.
+*Enemy.die() added to simplify all the different Tower.target()'s there now are.
+*Corrected some bugs when approaching the last wave.
+*Worked on rebalancing waves of enemies. 1-10 are done, 11-20 ARE NOT BALANCED!
+
+--------------
+Version 0.5.4:
+--------------
+*Changed HP back to losing one every time an enemy leaves the screen. You now
+    start with 20 HP, and gain 0.25 HP per turn.
+*Has a "Next Wave" button. Does exactly what you think it does.
+*Implemented the 'slow' ability for towers. It's pretty awesome :D
+*Changed the 'range' price. Its now 20, plus 20 for each range upgrade.
+*Added 'super slow' ability for towers. 'slow' brings enemies to 75% of their
+    speed for 1.25 seconds; while 'super slow' brings enemies to 50% of their
+    speed for 2 seconds.
+*New support for multiple enemy paths in a map.
+*Pausing has been removed. There are no timers anymore, just hit "Next Wave"
+    whenever you want a new wave to come and take as much time between as you'd
+    like!
+*Can have waves where the enemies come from different paths simultaneously.
+*Tower is now a base class for all towers, each of which will be a different
+    class.
+*Testing of selected is now based on __class__ object instead of __name__ for
+    Icon and Menu, and is based on containing Tower in __bases__ for Tower. This
+    is more accurate, better code, and will lead to better performance and
+    adaptability in the future.
+*Icon class now holds a type and the type's towerstats.
+*towerstats has become Basictowerstats, and Slowtowerstats has been created.
+*SlowTower class created.
+*Trimmed down the project folder. I hadn't realized how much extra, useless crap
+    there was just lingering in it.
+*Towers now generate their upgrade/sell buttons. This will make it easier to add
+    new upgrades for other towers.
+*Slow towers can now upgrade the 'amount of slow' applied to enemies, and how
+    long it lasts.
+*Enemies' move modified for accuracy (can now handle float movement), and speed
+    coefficients made equal (they move the same distance whether vertical or
+    horizontal).
+
+--------------
+Version 0.5.3:
+--------------
+*Ability rects/blits code space optimized.
+*Sender class created. These are the objects that control the 'waves' in the
+    game. Now, if the game is not paused, you can press Space and the next wave
+    will begin while any other will still be going.
+
+--------------
+Version 0.5.2:
+--------------
+*Removed Enemy health options from Options.txt because they weren't used.
+*Tried to balance out towers more.
+*Increased money gained from enemy kills by 1 credit per enemy.
+*Health is now gained: (waveNumberCompleted * player.hpt), where hpt is usually
+    one, until abilities are implemented.
+*Began commenting some more.
+*Towers cannot be placed in the path!
+*Tower upgrade buttons are now in the lower right hand corner.
+*Player abilities are implemented! Regen gives you extra health each
+    wave you defeat; while Interest gives you a boost to your interest rate.
+*There is now a 'base' in the middle. Enemies will head toward the base, steal
+    credits from you, then head back toward to entrance. If an enemy steals
+    credits and you kill it before it gets to the entrance, you will recover
+    the stolen credits. This gives you two chances to kill the enemy before it
+    hurts you.
+
+--------------
+Version 0.5.1:
+--------------
+*Removed all in-source comments other than those at the top and bottom of the
+    main code file. Any comments from now on can be considered up-to-date.
+*Menu support updated for callback functions. Menu constructor now takes a list
+    of tuples in this format: (String,Callback).
+*Menu moving changed to work with right- or middle-button.
+*Enemycounter increased to 7, to make the game easier.
+*In code: Selected and Towerselected have been merged into Selected.
+*In code: Selected and Menuselected have been merged into Selected.
+*Towers' Attack, Range, and Speed are upgraded separately now.
+*Towers will stay selected if upgrading, but de-select if selling or clicking
+    elsewhere.
+*Towers' Attack, Range, and Speed have independent costs, based on stats gained.
+*HOPEFULLY.... more balanced....
+*Enemies that make it through restart at the beginning, so you're still able to
+    get money from them.
+
+--------------
+Version 0.5.0:
+--------------
+*Added Enemy image rotations as per Gabriel Baptistussi.
+*Enemy images/rotations in pre-generated,pre-loaded array for quickness.
+*Added print notifications during loading.
+*Added preliminary Menu support/framework. Menus are transparent until clicked 
+    on. You can drag them around the screen as well.
+*Added preliminary Ability support/framework. Acquiring abilities not yet
+    implemented, however some abilities are working by way of keyinput.
+*Downtime and startup have been integrated into the main play loop. As a result,
+    during this time play is simply 'paused'. Seems to work much better, and be
+    more efficient.
+*genBackground MUCH more optimized. Play now starts almost instantly, instead of
+    15-ish second wait.
+*Only one tower type now. Will implement tower upgrading 'into' other types
+    (i.e. all towers start as 'basic', but you will be able to upgrade it to
+    'fire' or 'slow').
+*All tower upgrades are 50 credits. No max level. This is UN-BALANCED!
+*Enemy stats are all read from mapproperties.txt files in the map folder.
+*Enemies all have the 'none' trait. Changed this a while ago to counteract the
+    massive randomness in enemy traits. Enemy traits are still coded (I believe)
+    they just aren't accessed at all.
+*Nope, enemy traits have been removed because all former traits could be given
+    by editing stats in mapproperties.txt.
+
+Disclaimer: The comments in any source file may or may not be accurate! They
+    have not been updated in quite a few versions. I plan on working on them
+    quite soon.
+
+-*-*Lots more. I've been tinkering with this off and on for a while and stopped
+    logging changes.
+
+--------------
+Version 0.3.6:
+--------------
+*Raised armor value.
+*Added "super armor" trait.
+*New folders, files sorted into them.
+
+--------------
+Version 0.3.5:
+--------------
+*Slowed enemies down.
+*Slow tower now slows to half the start speed.
+*All upgrade levels are now 2/3 of the original cost.
+*There's now 5 frames between the release of each enemy.
+*Increased default enemy health.
+*Slow tower weakened.
+*New enemy image. (Actually tried this time. Though it borrows heavily from
+    other TDs).
+*Corrected a bug where the 'sell price' wasn't showing in downtime or startup.
+*'Sell price' now still shows when the tower is fully upgraded.
+*Now, when enemies reach the end of the path, the health they have left over is
+    deducted from the player's health. In light of this, default player health
+    is now 150. This value may need balancing.
+*Player health is now an option in options.txt.
+*Can now exit the game from downtime and startup.
+*Player health is recovered 2 health per wave.
+*Wave number and enemy type for the next wave is now displayed in downtime.
+*Armor implemented.
+
+--------------
+Version 0.3.4:
+--------------
+*Explosions.
+*New enemy image. Not the best.... but it's better than a blue square :)
+*Options are now in options.txt. True has to be 1 and False is 0.
+
+--------------
+Version 0.3.3:
+--------------
+*Now you can't place a tower touching another tower.
+*Has the option of drawing lines to the enemies when a tower hits them. You can
+    turn them off by changing targetlines to 0 in localdefs.py.
+*There's a pause between waves. You can adjust the length by changing wavedowntime
+    in localdefs.py.
+*Can change enemy health boundries: In localdefs.py, lowerhealthmultiplier and
+    higherhealthmultiplier are the lowest value and highest value, respectively,
+    that can be multiplied to the wave number to generate the enemies' health.
+    For example: Default is 7 and 8, so for wave 10, the lowest enemy health could
+        be 70 and the highest it could be is 80. For wave 25 they would be 175
+        and 200, respectively.
+
+--------------
+Version 0.3.2:
+--------------
+*New tower: slow.
+*Tower rebalance.
+*Better support for multiple maps/beggining support for progressing levels.
+*Basic timer class LocalTimer and SpeedUpTimer for slow towers, both in localdefs.
+*Can sell towers now! Just right- or middle-click on a selected tower.
+
+--------------
+Version 0.3.1:
+--------------
+*F key now changes to Fullscreen mode.
+*W key now changes to Windowed mode. (default)
+*Single script now split into multiple files.
+
+--------------
+Version 0.3.0:
+--------------
+*Expensive enemies now give you only 1.25 times the credits.
+*Cheap-O enemies now give you .75 times the credits, and have a tenth less life,
+    but are faster as well.
+*Rebalancing of towers, at least until the higher levels (basic and fire towers
+    end up being useless around wave 60 or so).
+*Each tower type upgrades differently now.
+*Added cannon tower, which has splash damage.
+*Icons at the bottom now tell the type and the price when mousing over.
+*You now have 30 seconds before the start to place and upgrade towers. You can
+    press Space to skip remaining time once you are done.
+*Enemy type is now displayed at the bottom. This is the CURRENT type.
+*Twice the chance of an enemy group have no trait ('none').
+*Cheap-O and High HP enemies now have a normal health bar, i.e. High HP enemies
+    had a health bar 1.5 times longer than others and Cheap-O enemies had empty
+    space between the red and the end of the black.
+*Changed images for basic and cannon towers.
+
+--------------
+Version 0.2.6:
+--------------
+*Towers now have 4 levels.
+*Enemies have a chance to have "traits":
+    -None: Basic enemy.
+    -High HP: Half again it's usual HP
+    -High Speed: Speed factor is increased by one
+    -Expensive: 1.5 credits per enemy
+    -Cheap-o: Only .5 credits per enemy
+*Redone graphics for 800x600 res. (Saves a ton of time)
+*Bullets have been removed for the time being. The class is still there, but is
+    not implemented.
+*If a tower has no enemies in range, it will keep its "ready to fire" state until
+    there is one. (Had problems with enemies passing through Sniper's range)
+*There is now a "movefile". This specifies what points enemies will head to.
+*Redone movefile.
+
+--------------
+Version 0.2.4:
+--------------
+*There's a path now!
+*Also, now when you're holding a tower, you can click the white bar to de-select it.
+
+--------------
+Version 0.2.3:
+--------------
+*Runs in 800x600 mode now. "Squares" are mostly gone! Unfortunately, right after
+    I did that, I figured out how to find the enemy's path and use the desertpath
+    image for it... using squares. I've decided NOT to go that route as I am very
+    much trying to stay away from squares.
+*Movelist is now simplified, instead of pixels it's essentially the row or column.
+    I transferred this over from a temporary design using the co-ords in movelist
+    as indices for the gamesquares array. Actually works quite well, if I do say
+    so myself :)
+*Most distances/sizes are now in terms of squsize, so readjusting for various
+    resolutions should be a whole lot easier next time.
+*A few commenting type-o's.
+
+--------------
+Version 0.2.2:
+--------------
+*Made screen sizing work, though not the greatest solution. I will continue
+    to search for the best possible way to do this. Unfortunately, in implementing
+    this, I have pushed farther into "gamesquare" territory, i.e. basing it around
+    adjacent squares in the game area, instead of individual pixels. Menu coming soon.
+
+--------------
+Version 0.2.1:
+--------------
+*First public release version.
