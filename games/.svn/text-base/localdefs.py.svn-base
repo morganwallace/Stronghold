@@ -1,0 +1,310 @@
+import os.path
+import math
+import os
+import sys
+import pygame
+import threading
+import time
+from sys import exit as sysexit
+from pygame.locals import *
+import PlayerUpgrades
+
+scrwid = 800 #Screen width.
+scrhei = 600 #Screen height. Uses 4:3 ratio.
+squsize = 20
+openbuttoninfo = []
+class Map():
+    def __init__(self):
+        self.current = 1
+        self.pathrectlist = None
+        self.pointmovelist = None
+        self.endrect = None
+        self.mapdict = dict()
+        self.pointmovelists = list()
+        self.pathrectlists = list()
+        self.wavesSinceLoss = 0
+    def getmovelist(self):
+        movelists = list()
+        movelistnum = -1
+        f = open(os.path.join('mapfiles',str(self.current),'movefile.txt'))
+        line = f.readline().strip().split(',')
+        self.basepoint = (int(line[0]),int(line[1]))
+
+        for line in f.readlines():
+            line = line.strip().split(',')
+            if int(line[0])<0 or int(line[1])<0 or int(line[0])>(scrwid) or int(line[1])>(scrhei/squsize):
+                movelists.append(list())
+                movelistnum+=1
+            movelists[movelistnum].append((int(line[0]),int(line[1])))
+
+        for movelist in movelists:
+            movelist.append(self.basepoint)
+            pointmovelist = list([(point[0]*squsize+int(squsize/2.0),point[1]*squsize+int(squsize/2.0)) for point in movelist])
+            pointmovelist.append((scrwid+squsize,scrhei+squsize))
+            pathrectlist = list([pygame.Rect(pointmovelist[ind],(pointmovelist[ind+1][0]-pointmovelist[ind][0],pointmovelist[ind+1][1]-pointmovelist[ind][1])) for ind in range(len(pointmovelist)-2)])
+            for rec in pathrectlist:
+                rec.normalize()
+            self.pointmovelists.append(pointmovelist)
+            self.pathrectlists.append(pathrectlist)
+            print "Move List Generated"
+    def getmapproperties(self):
+        def mapPropertiesGen(self):
+            f = open(os.path.join('mapfiles',str(self.current),'mapproperties.txt'))
+            for line in f.readlines():
+                if line[0]!='*':
+                    line = line.strip().split('=')
+                    linepro = line[1].strip().split(',')
+                    yield line[0],[float(each.strip()) for each in linepro]
+        self.mapdict = dict(mapPropertiesGen(self))
+        print "Map Properties Created"
+    def backgroundGen(self,bgsize):
+        print "Generating Background"
+
+        dp = imgLoad(os.path.join('backgroundimgs','roadsquare.jpg'))
+
+        background = imgLoad(os.path.join('mapfiles',str(self.current),'background.jpg'))
+        for pathnum in range(len(self.pointmovelists)):
+            pathrectlist = self.pathrectlists[pathnum]
+            pointmovelist = self.pointmovelists[pathnum]
+            for rec in [pygame.Rect(x,y,squsize,squsize) for x in range(0,scrwid,squsize) for y in range(0,scrhei,squsize)]:
+                if any([rec.collidepoint(point) for point in pointmovelist]):
+                    background.blit(dp,rec)
+                elif len(list([rect for rect in pathrectlist if rect.colliderect(rec)]))==2:
+                    background.blit(dp,rec)
+                else:
+                    collideindex = rec.collidelist(pathrectlist)
+                    if collideindex!=-1:
+                        background.blit(dp,rec.move(0,0))
+        self.baseimg = imgLoad(os.path.join('backgroundimgs','base.png'))
+        self.baserect = self.baseimg.get_rect(center=(self.basepoint[0]*squsize+(0.5*squsize),self.basepoint[1]*squsize+(0.5*squsize)))
+        print "Background Generated"
+        return background
+    def loadMap(self,bgsize,mapname):
+        self.xpbar = pygame.Rect(300,8,350,22)
+        self.current = mapname
+        self.iconhold = (None,0)
+        if os.path.exists(os.path.join('mapfiles',str(self.current))):
+            self.getmovelist()
+            self.getmapproperties()
+            return self.backgroundGen(bgsize)
+        else:
+            print "You Won!!!"
+            sysexit(1)
+
+mapvar = Map()
+
+class Player():
+    def __init__(self):
+        self.name = "player"
+
+        try:self.load()
+        except:pass
+
+        self.curXP = 0
+        self.curLV = 0
+        self.totLV = 0
+        self.findMaxXP()
+
+        try:
+            self.upgrades = self.loadarray['upgrades']
+        except:
+            self.upgrades = set()
+
+        self.currentChain = 0.0
+        self.health = 10
+        self.money = 25
+
+        self.modDict = dict()
+
+        self.modDict["tower"] = list()
+
+        for st in range(0,5):
+            self.modDict['tower'].append(dict())
+            for en in ['CostMod','RangeMod','DamageMod','HealMod','SpeedMod','HPBonus','ACBonus','HPMod','SlowP','SlowT']:
+                self.modDict['tower'][st][en] = 0
+
+        for st in range(0,5):
+            for en in ['Abilities']:
+                self.modDict['tower'][st][en] = []
+
+        self.modDict['towerSellMod'] = 0
+        self.modDict['rangerSlowAmount'] = 0.0
+        self.modDict['towerNum'] = 1
+
+        self.modDict['chainMax'] = 0.25
+
+        if 'upgrades' in self.loadarray.keys():
+            for up in self.loadarray['upgrades']:
+                if len(up)>0:
+                    if up[-1] == "-":
+                        eval("PlayerUpgrades."+up[:-1]+".load(self)")
+                    else:
+                        eval("PlayerUpgrades."+up[:-1]+".load(self,"+up[-1]+")")
+
+        for st in range(0,5):
+            self.modDict['tower'][st]['cost'] = 25*(1-self.modDict['tower'][0]['CostMod'])*(1-self.modDict['tower'][st]['CostMod'])
+            self.modDict['tower'][st]['maxhp'] = (10*(1+self.modDict['tower'][0]['HPMod'])*(1+self.modDict['tower'][st]['HPMod'])+self.modDict['tower'][0]['HPBonus']+self.modDict['tower'][st]['HPBonus'])
+            self.modDict['tower'][st]['ac'] = 10+self.modDict['tower'][0]['ACBonus']+self.modDict['tower'][st]['ACBonus']
+            self.modDict['tower'][st]['range'] = 2*squsize*(1+self.modDict['tower'][0]['RangeMod'])*(1+self.modDict['tower'][st]['RangeMod'])
+            self.modDict['tower'][st]['damAmt'] = 10*(1+self.modDict['tower'][0]['DamageMod'])*(1+self.modDict['tower'][st]['DamageMod'])
+            self.modDict['tower'][st]['startTargetTimer'] = 1*(1-self.modDict['tower'][0]['SpeedMod'])*(1-self.modDict['tower'][st]['SpeedMod'])
+            self.modDict['tower'][st]['healamt'] = 0.75*(1+self.modDict['tower'][0]['HealMod'])*(1+self.modDict['tower'][st]['HealMod'])
+            self.modDict['tower'][st]['slowper'] = 0.98*(1-self.modDict['tower'][0]['SlowP'])*(1-self.modDict['tower'][st]['SlowP'])
+            self.modDict['tower'][st]['slowtime'] = 1*(1+self.modDict['tower'][0]['SlowT'])*(1+self.modDict['tower'][st]['SlowT'])
+    def load(self):
+        self.loadarray = dict()
+        with open(self.name+".txt","r") as playerfile:
+            for line in playerfile.readlines():
+                var,val = line.split("=")
+                try:
+                    self.loadarray[var]=float(val.strip())
+                except:
+                    valarray = val.strip().split(",")
+                    self.loadarray[var]=set(valarray)
+    def addScreen(self,screen,clock):
+        self.screen = screen
+        self.clock = clock
+    def save(self):
+        if mapvar.current not in [k[:-1] for k in self.upgrades]:
+            if eval("PlayerUpgrades."+mapvar.current+".selectTower"):
+                eval("PlayerUpgrades."+mapvar.current+".doBeforeSelect(self)")
+                run = 1
+                bg = pygame.Surface((scrwid,scrhei))
+                bg.fill((255,255,255))
+                fontBig = pygame.font.Font(None,30)
+                nametext = fontBig.render("%s" % (eval("PlayerUpgrades."+mapvar.current+".name")),1,(0,0,0))
+                if nametext.get_width()>scrwid:
+                    fontBig = pygame.font.Font(None,20)
+                    nametext = fontBig.render("%s" % (eval("PlayerUpgrades."+mapvar.current+".name")),1,(0,0,0))
+                nametextpos = nametext.get_rect(centerx=scrwid/2,top=10)
+                while run:
+                    self.clock.tick(30)
+                    self.screen.blit(bg,(0,0))
+
+                    self.screen.blit(nametext,nametextpos)
+
+                    textrectdict = dict()
+
+                    for i in range(1,self.modDict['towerNum']+1):
+                        text = fontBig.render("%s" % ("Tower "+str(i)),1,(0,0,0))
+                        textpos = text.get_rect(centerx=i*(scrwid/(2+self.modDict['towerNum'])),centery=scrhei/2)
+                        textrectdict[str(i)] = textpos
+                        self.screen.blit(text,textpos)
+
+                    for event in pygame.event.get():
+                        if event.type == QUIT:
+                            run = 0
+                        elif event.type == MOUSEBUTTONUP:
+                            for key in textrectdict.keys():
+                                if textrectdict[key].collidepoint(event.dict['pos']):
+                                    run = 0
+                                    self.upgrades.add(mapvar.current+key)
+                        else:
+                            keyinput = pygame.key.get_pressed()
+                            if keyinput[K_ESCAPE]:
+                                run = 0
+                            elif keyinput[K_f]:
+                                self.screen = pygame.display.set_mode((scrwid,scrhei),FULLSCREEN)
+                            elif keyinput[K_w]:
+                                self.screen = pygame.display.set_mode((scrwid,scrhei))
+
+                    pygame.display.flip()
+            else:
+                self.upgrades.add(mapvar.current+"-")
+        with open(self.name+".txt","w") as playerfile:
+            playerfile.write("upgrades="+",".join(self.upgrades)+"\n")
+            print "Saved!"
+    def findMaxXP(self):
+        self.maxXP = 10*(self.totLV+1)
+    def gainXP(self,amt):
+        self.curXP += amt*(1+self.currentChain)
+        if self.curXP >= self.maxXP:
+            self.curXP-=self.maxXP
+            self.curLV += 1
+            self.totLV += 1
+            self.findMaxXP()
+            for st in range(1,5):
+                self.modDict['tower'][st]['cost'] /= 1.02
+                self.modDict['tower'][st]['maxhp'] *= 1.02
+                self.modDict['tower'][st]['ac'] *= 1.02
+                self.modDict['tower'][st]['range'] *= 1.02
+                self.modDict['tower'][st]['damAmt'] *= 1.02
+                self.modDict['tower'][st]['startTargetTimer'] *= 1.02
+                self.modDict['tower'][st]['healamt'] *= 1.02
+                self.modDict['tower'][st]['slowper'] *= 1.02
+                self.modDict['tower'][st]['slowtime'] *= 1.02
+#                print st,self.modDict['tower'][st]['cost']
+#                print st,self.modDict['tower'][st]['maxhp']
+#                print st,self.modDict['tower'][st]['ac']
+#                print st,self.modDict['tower'][st]['range']
+#                print st,self.modDict['tower'][st]['damAmt']
+#                print st,self.modDict['tower'][st]['startTargetTimer']
+            for tower in towerlist:
+                tower.reload()
+    def die(self):
+        print "You have died!"
+        sysexit(0)
+
+enemylist = list()
+towerlist = list()
+bulletlist = list()
+iconlist = list()
+menulist = list()
+explosions = list()
+senderlist = list()
+timerlist = list()
+
+def imgLoad(img):
+    file = os.path.join(img)
+    image = pygame.image.load(file)
+    image.convert_alpha()
+    return image
+
+player = Player()
+
+def distance(first,second):
+    return (math.sqrt((second.centerx-first.centerx)**2+(second.centery-first.centery)**2))
+
+class SlowTimer():
+    def __init__(self,percent,time):
+        self.amt = percent
+        self.time = time
+
+class PoisonTimer(threading.Thread):
+    def __init__(self,enemy,damage,seconds):
+        threading.Thread.__init__(self)
+        self.runtime = seconds
+        self.dam = damage
+        self.target = enemy
+        enemy.poisontimer=self
+        self.kill = False
+    def run(self):
+        sec = self.runtime*1.0
+        while(sec>0):
+            sec-=0.1
+            time.sleep(0.1)
+            if self.target.poisontimer == self or self.kill == True:
+                if self.target.health>0:
+                    self.target.health-=self.dam
+                    if self.target.health<=0:
+                        self.target.die()
+                        return
+                else:
+                    return
+            else:
+                return
+        if self.target.poisontimer == self:
+            self.target.poisontimer = None
+
+EnemyImageArray = list()
+def genEnemyImageArray():
+    for type in ["none","enemy","Speedy","Healthy","Armor"]:
+        ia = list()
+        try:enemyimage = imgLoad(os.path.join('enemyimgs',type+'.png'))
+        except:enemyimage = imgLoad(os.path.join('enemyimgs','enemy.png'))
+        ia.append(enemyimage)
+        ia.append(pygame.transform.rotate(enemyimage,90))
+        ia.append(pygame.transform.flip(enemyimage,True,False))
+        ia.append(pygame.transform.rotate(enemyimage,-90))
+        EnemyImageArray.append(ia)
+

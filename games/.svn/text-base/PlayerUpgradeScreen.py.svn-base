@@ -1,0 +1,86 @@
+import pygame
+import sys,os
+from pygame.locals import *
+import time
+from localdefs import imgLoad,player,towerlist
+import inspect
+import PlayerUpgrades
+
+def upgrade(screen,font,font2):
+    starttime = time.time()
+    background = screen.copy()
+    background.set_alpha(90)
+    tb = screen.copy()
+    tb.fill((0,0,0))
+    def resetIcons():
+        icons = []
+        ups = inspect.getmembers(PlayerUpgrades,inspect.isclass)
+        for c,d in ups:
+            try:
+                next = (c,eval("PlayerUpgrades."+c+".pos"),imgLoad(os.path.join("upgradeicons",c+".jpg")))
+                if (c in player.upgrades):
+                    temp = next[2].copy()
+                    temp.fill((0,150,0))
+                    temp.set_alpha(125)
+                    next[2].blit(temp,(0,0))
+                elif any([r not in player.upgrades for r in eval("PlayerUpgrades."+c+".req")]):
+                    temp = next[2].copy()
+                    temp.fill((150,0,0))
+                    temp.set_alpha(125)
+                    next[2].blit(temp,(0,0))
+                icons.append(next)
+            except:
+                try:
+                    next = (c,eval("PlayerUpgrades."+c+".pos"),imgLoad(os.path.join("upgradeicons",c[:2]+".jpg")))
+                    if (c in player.upgrades):
+                        temp = next[2].copy()
+                        temp.fill((0,150,0))
+                        temp.set_alpha(125)
+                        next[2].blit(temp,(0,0))
+                    elif any([r not in player.upgrades for r in eval("PlayerUpgrades."+c+".req")]):
+                        temp = next[2].copy()
+                        temp.fill((150,0,0))
+                        temp.set_alpha(125)
+                        next[2].blit(temp,(0,0))
+                    icons.append(next)
+                except:
+                    taimg = pygame.Surface((20,20))
+                    if (c in player.upgrades):
+                        taimg.fill((0,150,0))
+                    elif any([r not in player.upgrades for r in eval("PlayerUpgrades."+c+".req")]):
+                        taimg.fill((150,0,0))
+                    else:
+                        taimg.fill((90,90,255))
+                    icons.append((c,eval("PlayerUpgrades."+c+".pos"),taimg))
+        return icons
+    icons = resetIcons()
+    while 1:
+        screen.blit(tb,(0,0))
+        screen.blit(background,(0,0))
+        mouseon = None
+        for c,p,i in icons:
+            for r in eval("PlayerUpgrades."+c+".req"):
+                rp = eval("PlayerUpgrades."+r+".pos")
+                pygame.draw.aaline(screen,(255,255,255),i.get_rect(topleft=p).center,(rp[0]+10,rp[1]+10))
+        for c,p,i in icons:
+            screen.blit(i,p)
+            if i.get_rect(topleft=p).collidepoint(pygame.mouse.get_pos()):
+                mouseon = c
+                info = font2.render("%s" % (eval("PlayerUpgrades."+c+".name")),1,(255,200,200))
+                infopos = info.get_rect(center=(screen.get_width()/2,screen.get_height()-30))
+                screen.blit(info,infopos)
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                sys.exit()
+            elif event.type == MOUSEBUTTONUP:
+                if event.dict['button']==1:
+                    if mouseon:
+                        eval("PlayerUpgrades."+mouseon+".apply(player,towerlist)")
+                        icons = resetIcons()
+                else:
+                    return time.time()-starttime
+            else:
+                keyinput = pygame.key.get_pressed()
+                if keyinput[K_ESCAPE]:
+                    sys.exit()
+        pygame.display.flip()

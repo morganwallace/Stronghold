@@ -1,0 +1,74 @@
+import localdefs
+import MainFunctions
+import localclasses
+import sys
+
+def leftCheckSelect(event,selected):
+    for object in (localdefs.towerlist+localdefs.iconlist):
+        if object.rect.collidepoint(event.dict['pos']):
+            return object,True
+    return selected,False
+
+def leftSelectedTower(event,selected):
+    for text,rect,info,infopos,cb in selected.buttonlist:
+        if rect.collidepoint(event.dict['pos']):
+            cb(selected)
+            return True
+    return False
+
+def placeTower(event,selected):
+    if (not any([ttower.rect.collidepoint(event.dict['pos']) for ttower in localdefs.towerlist])
+        and not any([p.inflate(25,25).collidepoint(event.dict['pos']) for pathrectlist in localdefs.mapvar.pathrectlists for p in pathrectlist])):
+        localclasses.Tower(selected.num,MainFunctions.roundPoint(event.dict['pos']))
+        return None,True,0
+    return selected,False,0
+
+def leftSelectedIcon(event,selected):
+    if event.dict['pos'][1]<localdefs.scrhei-localdefs.squsize:
+        if localdefs.player.money>=localdefs.player.modDict['tower'][selected.num]['cost']:
+            return placeTower(event, selected)
+        else:
+            print "Not Enough Money"
+    return selected,False,0
+
+def leftAlreadySelected(event,selected):
+    if selected.__class__ == localclasses.Icon:
+        return leftSelectedIcon(event, selected)
+    elif localclasses.Tower in selected.__class__.__bases__:
+        if not leftSelectedTower(event, selected):
+            return None,True,0
+        else:
+            return selected,False,0
+
+def mouseButtonUp(event,selected,screen,font,font2):
+    if event.dict['button']==1:
+        selected,lCSb = leftCheckSelect(event, selected)
+        if not lCSb and selected:
+            return leftAlreadySelected(event, selected)
+        else: return selected,lCSb,0
+    else:
+        return None,(False if not selected else True),0
+
+def nextWave(event,wavenum,Sender):
+    wavenum+=1
+    localdefs.mapvar.wavesSinceLoss+=1
+    if ('wave'+str(wavenum)+'a') in localdefs.mapvar.mapdict:
+        Sender(wavenum,'a')
+    if ('wave'+str(wavenum)+'b') in localdefs.mapvar.mapdict:
+        Sender(wavenum,'b')
+    if ('wave'+str(wavenum)+'c') in localdefs.mapvar.mapdict:
+        Sender(wavenum,'c')
+    if ('wave'+str(wavenum)+'d') in localdefs.mapvar.mapdict:
+        Sender(wavenum,'d')
+    if all([('wave'+str(wavenum)+letter) not in localdefs.mapvar.mapdict for letter in ['a','b','c','d']]):
+        if len(localdefs.enemylist) == 0:
+            print "You won that one!"
+            localdefs.player.save()
+            sys.exit()
+        else:
+            print "There are still enemies on the screen!"
+            wavenum-=1
+    else:
+        for tower in localdefs.towerlist:
+            tower.hp = min(tower.maxhp,tower.hp+tower.level)
+    return wavenum

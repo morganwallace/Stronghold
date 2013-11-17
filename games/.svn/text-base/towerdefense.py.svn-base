@@ -1,0 +1,108 @@
+#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/
+#
+# Original Coder: Austin Morgan (codenameduckfin@gmail.com)
+# Version: 0.8.5
+#
+# If altering the code, please keep this comment box at least. Also, please
+# comment all changes or additions with two pound signs (##), so I can tell what's
+# been changed and what hasn't. Adding another comment box below this one with your
+# name will insure any additions or changes you made that make it into the next version
+# will be credited to you. Preferably, you'd leave your email and a little description
+# of your changes, but that's not absolutely needed.
+#
+# License:
+# All code and work contained within this file and folder and package is open for
+# use, however please include at least a credit to me and any other coders working
+# on this project.
+#
+#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/
+
+##/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#
+##
+## Gabriel Lazarini Baptistussi (gabrielbap1@gmail.com)
+##
+## I just made a small change in localclasses.Enemy.move(), now the enemies
+## have a different picture for each direction they are moving.
+##
+##/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#/#
+
+import sys
+import pygame
+from pygame.locals import *
+from localdefs import *
+from localclasses import *
+from mapmenu import pickMap
+from SenderClass import Sender
+import MainFunctions
+import time
+
+def main():
+    pygame.init()
+    print "Pygame Initialized"
+    pygame.display.set_caption("PyGame Tower Defence Game")
+    pygame.mouse.set_visible(1)
+    #localdefs: mapvar = Map()
+    background = mapvar.loadMap((scrwid,scrhei),pickMap())
+    print "Map Object Generated"
+    screen = pygame.display.set_mode((scrwid,scrhei))
+    print "Display Initialized"
+    clock = pygame.time.Clock()
+    genEnemyImageArray()
+    run=True #Run loop
+    wavenum = 0
+    selected = None #Nothing is selected
+
+    MainFunctions.makeIcons()
+
+    player.addScreen(screen,clock)
+    
+    print "Begin Play Loop!!!"
+
+    font = pygame.font.Font(None,20)
+    speed = 3
+    frametime = speed/30.0
+    while run:
+        starttime = time.time()
+
+        MainFunctions.tickAndClear(screen, clock, background, frametime)
+
+        MainFunctions.workSenders(frametime)
+
+        MainFunctions.workTowers(screen,frametime)
+
+        MainFunctions.dispExplosions(screen)
+
+        MainFunctions.dispText(screen,wavenum)
+
+        MainFunctions.workEnemies(screen,frametime)
+
+        screen,selected,wavenum,speed,timedel = MainFunctions.workEvents(screen, selected, wavenum, Sender, speed,pygame.font.Font(None,30),pygame.font.Font(None,25))
+
+        starttime += timedel
+
+        MainFunctions.dispStructures(screen,pygame.mouse.get_pos())
+
+        screen.blit(mapvar.baseimg,mapvar.baserect)
+
+        if selected and selected.__class__ == Icon:
+            MainFunctions.selectedIcon(screen, selected)
+
+        if selected and Tower in selected.__class__.__bases__:
+            selected = None
+
+        screen.blit(openbuttoninfo[0],openbuttoninfo[1])
+
+        MainFunctions.dispIcons(screen, pygame.mouse.get_pos(), font, frametime)
+
+        pygame.display.flip()
+
+        frametime = (time.time() - starttime) * speed
+
+main()
+
+#Thanks to everyone who looks over this code, or tests this thing out. Feel free
+#to contact me at the email address listed above with any questions, comments, or
+#your own set of changes. I've wanted to do a game like this for a while, so I'll
+#stay committed as long as it has some interest in the community.
+
+#Have a nice day :)

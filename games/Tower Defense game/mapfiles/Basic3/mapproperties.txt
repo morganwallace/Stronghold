@@ -1,0 +1,8 @@
+enemylevel=4
+wave1:
+num=1,hp=20,cost=3,img=5
+num=5
+num=1,hp=20,cost=3,timer=2,img=5
+num=5
+wave2:
+num=20
