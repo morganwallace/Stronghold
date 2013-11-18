@@ -23,8 +23,8 @@ Find the link to the original game here:
 ###Accelerometer code
 **pitch_role.ino** is a slight modification of the example code that was modified to run out of a usb port. It outputs the pitch and roll of the accelerometer to the serial port every 10 miliseconds. 
 
-**xyz_out** is another mod of the example code that instead outputs the forces (g) in each direction (x, y, and z) to the serial port every 10 ms.
+**xyz_out.ino** is another mod of the example code that instead outputs the forces (g) in each direction (x, y, and z) to the serial port every 10 ms.
 ###Arduino_to_DB_Simple
 **Arduino_to_DB_Simple.ino** is a first attempt to put the data output from the serial monitor into a data storage system. 
 ### Python Viz
-Real-time visualization of y-axis acceleration in Gs. Uses [Matplotlib](http://matplotlib.org) to take parsed serial output and graph it
+**animation_Y_Gs.py** is a real-time visualization of y-axis acceleration in Gs. Uses [Matplotlib](http://matplotlib.org) to take parsed serial output and graph it
