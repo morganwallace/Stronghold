@@ -7,14 +7,14 @@ import matplotlib.animation as animation
 def data_gen():
     t = data_gen.t
     cnt = 0
-    while cnt < 1000:
+    while cnt < 1000: # limit the time to 50 secs
         cnt+=1
         t += 0.05
         y=get_data_from_serial()
         print y
         if y!= None: 
             yield t, y
-        # else: yield data_gen()
+    # else: yield data_gen()
 data_gen.t = 0
 
 fig, ax = plt.subplots()

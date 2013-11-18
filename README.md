@@ -5,6 +5,8 @@
 
 The accelerometer will be attached to the dumbbell and sense motion in many directions and compute it into distinct motions and then abstract those into reps. Each rep must also be categorized by type of lifting movement. 
 
+The goal is to make a **multiplayer tower-defense game** that is compelling enough to encourage more exersice.
+
 ##Members
 
 Name | Email | Responsibility

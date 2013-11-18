@@ -12,15 +12,15 @@ def data_gen():
         t += 0.05
         yield t, np.sin(2*np.pi*t) * np.exp(-t/10.)
 
-def setup_plot():
-    data_gen.t = 0
+# def setup_plot():
+data_gen.t = 0
 
-    fig, ax = plt.subplots()
-    line, = ax.plot([], [], lw=2)
-    ax.set_ylim(-1.1, 1.1)
-    ax.set_xlim(0, 5)
-    ax.grid()
-    xdata, ydata = [], []
+fig, ax = plt.subplots()
+line, = ax.plot([], [], lw=2)
+ax.set_ylim(-1.1, 1.1)
+ax.set_xlim(0, 5)
+ax.grid()
+xdata, ydata = [], []
 
 def run(data):
     # update the data
@@ -48,12 +48,14 @@ def get_data_from_serial():
 		print pitch_roll
 		# pitch=float(pitch_roll[:str(pitch_roll).find(":")])
 		# roll=float(pitch_roll[pitch_roll.find(":")+1:])
-		time.sleep(.10)
+		# time.sleep(.10)
 
 def main():
-	while True:
+    # setup_plot()
+    animate()
+	# while True:
 		# print serial.Serial('/dev/tty.usbmodem1421', 9600).readline()
-		get_data_from_serial()
+		# get_data_from_serial()
 
 if __name__ == '__main__':
 	main()
