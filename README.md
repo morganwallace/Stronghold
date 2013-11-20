@@ -22,6 +22,13 @@ Clemens Meyer|| Presentation and Game Design
 **Tower Defense Game** is a simple python based game found on the [PyGame](http://pygame.org) website.
 Find the link to the original game here: 
 <http://www.pygame.org/project-Python+PyGame+Tower+Defence-1296-.html>
+
+**Color Tower Defense Source 2.23** is a solid python tower defense game writen with plenty of comments for our team to use as the basic scaffolding for our game.
+<http://www.pygame.org/project-Color+Tower+Defense-1688-.html>
+
+###Server
+Using [Flask](http://flask.pocoo.org/), we will generate the website that users see
+
 ###Accelerometer code
 **pitch_role.ino** is a slight modification of the example code that was modified to run out of a usb port. It outputs the pitch and roll of the accelerometer to the serial port every 10 miliseconds. 
 
