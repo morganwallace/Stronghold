@@ -1,8 +1,10 @@
+from __future__ import division
 import serial
 import time
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+
 
 def data_gen():
     t = data_gen.t
@@ -19,8 +21,8 @@ data_gen.t = 0
 
 fig, ax = plt.subplots()
 line, = ax.plot([], [], lw=2)
-ax.set_ylim(1.1, -3.1)
-ax.set_xlim(0, 5)
+ax.set_ylim(-3.1, 1.1)
+ax.set_xlim(0, 10)
 ax.grid()
 xdata, ydata = [], []
 def run(data):
@@ -30,8 +32,11 @@ def run(data):
     ydata.append(y)
     xmin, xmax = ax.get_xlim()
 
-    if t >= xmax:
-        ax.set_xlim(xmin, 2*xmax)
+    if t >= xmax-1: #once the line get's halfway...
+        #move the window by 1/20th of a second forward
+        xmin+=5
+        xmax+=5 
+        ax.set_xlim(xmin, xmax)
         ax.figure.canvas.draw()
     line.set_data(xdata, ydata)
 
