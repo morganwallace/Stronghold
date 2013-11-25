@@ -4,12 +4,16 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import pickle
+from os.path import join
 
-
+filename=join("labeled_data",raw_input("name this training set: "))
+samples=[]
 def data_gen():
+    global samples
     t = data_gen.t
     cnt = 0
-    while cnt < 2000: # limit the time to 50 secs
+    while cnt < 1000: # limit the time to 100 secs
         cnt+=1
         t += 0.05
         try:
@@ -18,7 +22,10 @@ def data_gen():
             x,y,z =0,0,0
         # print y
         if y!= None: 
-            yield t, x,y,z
+            data =t,x,y,z 
+            samples.append(data)
+            yield data
+    pickle.dump(samples,open(filename+".p","wb"))
     # else: yield data_gen()
 data_gen.t = 0
 
