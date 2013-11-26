@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import pickle
 from os.path import join
+import csv
+import time
 
 filename=join("labeled_data",raw_input("name this training set: "))
 samples=[]
@@ -26,6 +28,7 @@ def data_gen():
             samples.append(data)
             yield data
     pickle.dump(samples,open(filename+".p","wb"))
+
     # else: yield data_gen()
 data_gen.t = 0
 
@@ -73,6 +76,9 @@ def get_data_from_serial():
     # print s
     x, y, z = s[0],s[1],s[2]
     return x,y,z
+
+
+
 
 ani = animation.FuncAnimation(fig, run, data_gen, blit=False, interval=10,
     repeat=False)
