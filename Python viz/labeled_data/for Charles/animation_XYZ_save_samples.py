@@ -4,12 +4,18 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import pickle
+from os import path
+import csv
 
-
+exerciseType="standing_calf"
+filename=path.join("labeled_data",exerciseType)
+samples=[]
 def data_gen():
+    global samples
     t = data_gen.t
     cnt = 0
-    while cnt < 2000: # limit the time to 50 secs
+    while cnt < 500: # limit the time to 25 secs
         cnt+=1
         t += 0.05
         try:
@@ -18,8 +24,26 @@ def data_gen():
             x,y,z =0,0,0
         # print y
         if y!= None: 
-            yield t, x,y,z
+            data =t,x,y,z 
+            samples.append(data)
+            yield data
+    #save to file for later analysis.
+    pickle.dump(samples,open(filename+".p","wb"))
+    toCSV(filename+".p")
+    print "done"
     # else: yield data_gen()
+
+def toCSV(picklefile):
+    global exerciseType
+    now =time.asctime()[4:-5]
+
+    with open("labeled_data/"+now+"_"+exerciseType+".csv","wb") as csvFile:
+        data=pickle.load(open(picklefile))
+        writer=csv.writer(csvFile)
+        writer.writerow(["t (sec)","x","y","z"]) #header
+        for i in data:
+            writer.writerow(list(i))
+
 data_gen.t = 0
 
 fig, ax = plt.subplots()
@@ -70,3 +94,4 @@ def get_data_from_serial():
 ani = animation.FuncAnimation(fig, run, data_gen, blit=False, interval=10,
     repeat=False)
 plt.show()
+ser.close()
