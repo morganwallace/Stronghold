@@ -1,4 +1,4 @@
-#Arduino Dumbbell Accelerometer
+##Arduino Dumbbell Accelerometer
 
 ##Overview
 **This code will run on an Arduino Uno connected to an ADXL45 attitute sensor**
@@ -11,10 +11,10 @@ The goal is to make a **multiplayer tower-defense game** that is compelling enou
 
 Name | Email | Responsibility
 ------------ | ------------- | ------------
-Morgan Wallace | morgan@ischool.berkeley.edu  | Accelerometer and output visualization
-Divya Karthikeyan |   | Accelerometer output
-SUHAIB SAQIB SYED|| Research and Wireframing
-Clemens Meyer|| Presentation and Game Design
+Morgan Wallace | morgan@ischool.berkeley.edu | Accelerometer and output visualization
+Divya Karthikeyan | divyaanand@berkeley.edu | Accelerometer output
+SUHAIB SAQIB SYED| susyed@berkeley.edu | Research and Wireframing
+Clemens Meyer| clemens.meyer@ischool.berkeley.edu | Presentation and Game Design
 
 ---
 ##Specifics
