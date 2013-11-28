@@ -1,3 +1,10 @@
+/* Stronghold Game
+ * 
+ * Defend the castle from the enemies!
+ * Use the 'A' button on your keyboard to shoot them.
+ * The game is over when the castle is too damaged.
+*/
+
 PImage stronghold_bg;
 PImage explosion;
 
