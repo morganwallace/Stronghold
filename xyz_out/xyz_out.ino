@@ -24,7 +24,11 @@ void setup()
 {
 	acc.begin();
 	Serial.begin(9600);
-	delay(100);
+         // while the serial stream is not open, do nothing:
+        while (!Serial) {
+          Serial.println("start");
+        }
+	delay(1000);
 }
 
 
@@ -38,11 +42,7 @@ void loop()
 	fYg = Yg * alpha + (fYg * (1.0 - alpha));
 	fZg = Zg * alpha + (fZg * (1.0 - alpha));
 
-	//Roll & Pitch Equations
-	roll  = (atan2(-fYg, fZg)*180.0)/M_PI;
-	pitch = (atan2(fXg, sqrt(fYg*fYg + fZg*fZg))*180.0)/M_PI;
-
-
+//        Serial.println(Xg);
 	Serial.print(fXg);
 	Serial.print(",");
 	Serial.print(fYg);
