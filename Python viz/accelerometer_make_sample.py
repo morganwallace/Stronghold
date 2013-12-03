@@ -1,9 +1,9 @@
 from __future__ import division
 import serial
 import time
-import numpy as np
+# import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib
+# import matplotlib
 import matplotlib.animation as animation
 import pickle
 import os
@@ -12,9 +12,10 @@ import csv
 
 
 #modifiable variables
-runningTime=50 #seconds
-exerciseType="lateral_raise"
+runningTime=20 #seconds
+exerciseType="bicep_curls"
 movingWindow=False
+sampleRate =0.2 # set in arduino code!!
 
 #Make OS appropriate output filename
 # now =time.asctime()[4:-5]
@@ -42,6 +43,7 @@ ax.set_xlim(0, runningTime)
 ax.grid()
 ax.set_xlabel('time (s)')
 ax.set_ylabel('acceleration (g)')
+ax.set_title(exerciseType)
 
 
 
@@ -51,14 +53,14 @@ def data_gen():
     '''
     global runningTime
     global samples
-
-    sampleRate =0.05
+    global sampleRate
+    
     t = data_gen.t
     timePassed = 0
 
     # limit the time to runningTime
     while timePassed < runningTime: 
-        timePassed+=.05
+        timePassed+=sampleRate
         t += sampleRate
         try:
             x,y,z=get_data_from_serial()
@@ -114,9 +116,10 @@ def run(data):
     return lineX,lineY,lineZ
 
 ser = serial.Serial('/dev/tty.usbmodem1421', 9600)
+# time.sleep(.5)
 def get_data_from_serial():
     serialOutput=ser.readline()
-    print serialOutput
+    # print serialOutput
     s=serialOutput.split(",")
     if len(s)!=3:
         return None

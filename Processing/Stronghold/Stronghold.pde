@@ -5,6 +5,9 @@
  * The game is over when the castle is too damaged.
 */
 
+import processing.serial.*;
+Serial myPort;  // The serial port
+
 PImage stronghold_bg;
 PImage explosion;
 
@@ -16,6 +19,14 @@ float castlehealth;        // Health of the castle
 boolean gameOn;            // If false, game is over
 
 void setup() {
+  myPort = new Serial(this, "/dev/tty.usbmodem1421", 9600);
+  //Create Serial Object (9600 Baud)
+  Serial.begin(9600);
+  
+  //Create a Wire Object
+  Wire.begin();
+
+
   size(640, 480);
   background(0,0,0);
   
@@ -41,6 +52,17 @@ void draw() {
     drawHealthBar(10, 10, castlehealth);
   
     knight1.display();  
+       
+    //Read in from Serial Port for accelerometer data
+    while (myPort.available() > 0) {
+      String inBuffer = myPort.readString();   
+      if (inBuffer != null) {
+        println(inBuffer);
+        //split the serial output into an arrary of coordinates
+        String[] coords = inBuffer.split(",")
+        if (coords[1]>abs(.8)
+      }
+    }
        
     for (int i = 0; i < skeletons.length; i++) {
       skeletons[i].display();
