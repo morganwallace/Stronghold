@@ -21,7 +21,7 @@ double fZg = 0;
 ADXL345 acc;
 
 void setup() {
-//        Wire.begin();
+        Wire.begin();
   	acc.begin();
 	Serial.begin(9600);
         
@@ -51,6 +51,7 @@ void loop(){
         Serial.print(",");
         Serial.print(fZg);
         Serial.println();   
-
-	delay(50);
+        
+        
+	delay(10);
 }
