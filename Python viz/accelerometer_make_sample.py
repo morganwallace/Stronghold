@@ -12,8 +12,8 @@ import csv
 
 
 #modifiable variables
-runningTime=20 #seconds
-exerciseType="bicep_curls"
+runningTime=30 #seconds
+exerciseType="test"
 movingWindow=False
 sampleRate =0.2 # set in arduino code!!
 
@@ -38,15 +38,17 @@ lineX, = ax.plot([], [],"r-", lw=2,label="X")
 lineY, = ax.plot([], [],"g-", lw=2,label="Y")
 lineZ, = ax.plot([], [],"b-", lw=2,label="Z")
 legend=plt.legend()
-ax.set_ylim(-2.0, 2.0)
+ax.set_ylim(-1.0, 1.0)
 ax.set_xlim(0, runningTime)
+if movingWindow==True: ax.set_xlim(0, 20)
 ax.grid()
 ax.set_xlabel('time (s)')
 ax.set_ylabel('acceleration (g)')
 ax.set_title(exerciseType)
 
-
-
+xs=[]
+ys=[]
+zs=[]
 def data_gen():
     '''Generator that yields data for real-time animation
     Get's data from the
@@ -54,6 +56,8 @@ def data_gen():
     global runningTime
     global samples
     global sampleRate
+    global xs,ys,zs
+
     
     t = data_gen.t
     timePassed = 0
@@ -67,9 +71,13 @@ def data_gen():
         except:
             x,y,z =0,0,0
         if y!= None: 
-            data =t,x,y,z 
-            samples.append(data)
-            yield data
+        	
+	    	#convert to m/(s*s) and 
+	    	xdisplacement=x*10*timePassed*timePassed
+
+	        data =t,x,y,z 
+	        samples.append(data)
+	        yield data
     #save to file for later analysis.
     ser.close()
     save(samples)
