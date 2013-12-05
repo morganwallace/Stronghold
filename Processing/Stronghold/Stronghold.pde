@@ -13,6 +13,8 @@ PImage explosion;
 
 Knight knight1;
 Skeleton[] skeletons;
+ArrayList<Arrow> arrows;
+int arrownumber = 1;
 
 float castleborder = 190;  // X coordinate of the wall of the castle
 float castlehealth;        // Health of the castle
@@ -46,6 +48,8 @@ void setup() {
   for (int i = 0; i < skeletons.length; i++) {
     skeletons[i] = new Skeleton(width, (i+1)*100, random(0.5, 1.5), 10, i);
   }
+  
+  arrows = new ArrayList<Arrow>(); 
 }
 
 void draw() {
@@ -70,6 +74,15 @@ void draw() {
     for (int i = 0; i < skeletons.length; i++) {
       skeletons[i].display();
       skeletons[i].move();
+    }
+    
+    for (int i = arrows.size()-1; i >= 0; i--) {
+      Arrow arrow = arrows.get(i);
+      arrow.display();
+      arrow.move();
+      if(arrow.finished()) {
+        arrows.remove(i);
+      }
     }
     
     if(keyPressed) {
@@ -102,7 +115,7 @@ class Knight {
     image(image, xpos, ypos);
   }
   
-  // Function to 
+  // Function to shoot an enemy with an arrow
   void shoot() {
     // Figure out if waited long enough
     if(millis() > lastShot + wait) {
@@ -115,15 +128,36 @@ class Knight {
       */
       
       // Figure out which enemy is closest
-      int closestEnemy = skeletons[0].getIndex();
+      int closestEnemy = skeletons[0].index;
       for(int i=1; i<skeletons.length; i++) {
-        if(skeletons[i].getXpos() < skeletons[closestEnemy].getXpos() ) {
-          closestEnemy = skeletons[i].getIndex();
+        if(skeletons[i].xpos < skeletons[closestEnemy].xpos ) {
+          closestEnemy = skeletons[i].index;
         }
       }
+      
+      // Play flying arrow animation
+      shootArrow(skeletons[closestEnemy]);      
+      
       // Damage closest enemy 
       skeletons[closestEnemy].getHit(damage);
     }
+  }
+  
+  
+  void shootArrow(Skeleton enemy) {
+    float startx = xpos+image.width;
+    float starty = ypos+image.height/2;
+    float endx = enemy.xpos;
+    float endy = enemy.ypos + enemy.image_m.height/2;
+    
+    /*
+    strokeWeight(5);
+    stroke(0, 0, 0);
+    line(startx, starty, endx, endy);
+    */
+    
+    arrows.add(new Arrow(startx, starty, endx, endy, arrownumber));
+    arrownumber++;
   }
 
 }  
@@ -138,7 +172,7 @@ class Skeleton {
   float xspeed;
   float health;         // Current health of the monster
   float healthInit;     // Initial health of the monster
-  float footpos = 0;      // Foot position
+  float footpos = 0;    // Foot position
   int index;            // Index of the monster
   
   
@@ -212,14 +246,6 @@ class Skeleton {
     health = healthInit;
   }
   
-  float getXpos() { // Return X position of skeleton
-    return xpos;
-  }
-  
-  int getIndex() { // Return index of skeleton
-    return index;
-  }
-  
   void explode() { // Triggers explosion
     image(explosion, xpos, ypos);
   }
@@ -230,6 +256,62 @@ class Skeleton {
   }
 }
 
+class Arrow {
+  PImage image;
+  float xpos;
+  float ypos;
+  
+  float startx;
+  float starty;
+  float endx;
+  float endy;
+    
+  float speed = 10;
+  
+  float angle;
+  
+  float pathlength;  // length of the path that the arrow travels
+  
+  int index;
+  
+  Arrow(float startx_my, float starty_my, float endx_my, float endy_my, int index_my) {
+    // load image for arrow
+    image = loadImage("../../Assets/arrow.png");
+    
+    // scale images by monster_scale factor
+    image.resize(round(image.width*monster_scale),round(image.height*monster_scale));
+    
+    startx = startx_my;
+    starty = starty_my;
+    endx = endx_my;
+    endy = endy_my;
+    
+    xpos = startx;
+    ypos = starty;
+        
+    index = index_my;
+    
+    pathlength = sqrt((endx-startx)*(endx-startx) + (endy-starty)*(endy-starty));
+    //println("Arrow path length: " + pathlength);
+    angle = atan((endy-starty)/(endx-startx));
+    println("Arrow angle: " + angle/(PI/2));
+  }
+    
+  void display() {
+    //rotate(angle/PI);
+    image(image, xpos, ypos);
+  }
+  
+  void move() {
+    xpos += speed;
+    ypos += speed*tan(angle);
+  }
+  
+  boolean finished() {
+    return false;
+  }
+  
+}
 
 void drawHealthBar (int posx, int posy, float health) { // Draws the health bar
   fill(0,230,0,200);
