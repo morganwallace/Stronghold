@@ -3,8 +3,11 @@ class Knight {
   float xpos;
   float ypos;
   float damage = 10;   // Damage from each shot
-  int wait = 500;     // Time between shots
-  int lastShot = 0;   // Stores the time of the last shot
+  
+  // Time-related variables
+  long current;
+  long lastShot = 0;   // Stores the time of the last shot
+  long wait = 500;     // Time between shots
 
   Knight(float xpos_my, float ypos_my) {
     // Load and resize knight image (scaling divided by 2, as original image is larger)
@@ -21,10 +24,13 @@ class Knight {
   
   // Function to shoot an enemy with an arrow
   void shoot() {
+    
     // Figure out if waited long enough
-    if(millis() > lastShot + wait) {
-      lastShot = millis();
-            
+    Date d = new Date();
+    current = d.getTime();
+    if(current > lastShot + wait) {
+      lastShot = current;
+
       // Figure out which enemy is closest
       int closestEnemy = skeletons[0].index;
       for(int i=1; i<skeletons.length; i++) {

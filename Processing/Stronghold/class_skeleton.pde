@@ -41,7 +41,7 @@ class Skeleton {
     if(footpos < 3) {
       image(image_m, xpos, ypos);
     } else
-    if(footpos < 4) {
+    if(footpos >= 3) {
       image(image_r, xpos, ypos);
     }
   }
@@ -57,7 +57,7 @@ class Skeleton {
     xpos = xpos - xspeed;
     
     // Switch foot position depending on game speed
-    if (footpos < 3.8) {
+    if (footpos < 4) {
       footpos += walkingspeed*gamespeed;
     }
     else {
