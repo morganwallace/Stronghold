@@ -36,11 +36,11 @@ class Knight {
         }
       }
       
-      // Play flying arrow animation
+      // Shoot arrow
       shootArrow(skeletons[closestEnemy]);      
       
-      // Damage closest enemy 
-      skeletons[closestEnemy].getHit(damage);
+      // Damage closest enemy (No longer needed, now in Arrow class) 
+      //skeletons[closestEnemy].getHit(damage);
     }
   }
   

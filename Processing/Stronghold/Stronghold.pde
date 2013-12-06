@@ -59,9 +59,11 @@ void draw() {
       Arrow arrow = arrows.get(i);
       arrow.display();
       arrow.move();
+      
       if(arrow.finished()) {
         arrows.remove(i);
       }
+      
     }
     
     if(keyPressed) {
