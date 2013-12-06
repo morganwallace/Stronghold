@@ -1,4 +1,4 @@
-##Arduino Dumbbell Accelerometer
+#Arduino Dumbbell Accelerometer
 
 ##Overview
 **This code will run on an Arduino Uno connected to an ADXL45 attitute sensor**
