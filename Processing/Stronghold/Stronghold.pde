@@ -12,7 +12,7 @@ String lines[];
 int previous_reps=0;
 
 
-Knight knight1;
+Knight knight1, knight2;
 Skeleton[] skeletons;
 ArrayList<Arrow> arrows;
 int arrownumber = 1;
@@ -36,7 +36,8 @@ void setup() {
   stronghold_bg = loadImage("../../Assets/stronghold_bg.png");
   explosion = loadImage("../../Assets/explosion.png");
   
-  knight1 = new Knight(100, 100);
+  knight1 = new Knight(width/6, height/8); //changed the co-ordinated based on width and height proportions
+  knight2 = new Knight(width/6, height/3); //added new knight
   
   // Create array of skeletons (with random speed)
   skeletons = new Skeleton[skeleton_number];
@@ -53,7 +54,8 @@ void draw() {
     
     drawHealthBar(10, 10, castlehealth);
   
-    knight1.display();  
+    knight1.display(); 
+    knight2.display();
        
     for (int i = 0; i < skeletons.length; i++) {
       skeletons[i].display();
@@ -87,6 +89,11 @@ void draw() {
       if (key == 'a' || key == 'A') {
         knight1.shoot();
       }
+      
+      if (key == 'l' || key == 'L') {
+        knight2.shoot();
+      }
+      
     }
   
   }
