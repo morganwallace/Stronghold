@@ -29,7 +29,7 @@ ser = serial.Serial('/dev/tty.usbmodem1421', 9600)
 
 def timer():
 	global start_time
-	return time.time()-start_time
+	return time.time()
 
 def get_data_from_serial():
     serialOutput=ser.readline()
@@ -42,7 +42,7 @@ def get_data_from_serial():
         except: return None
     # print s
     x, y, z = serialTuple[0],serialTuple[1],serialTuple[2]
-    t=timer()
+    t=time.time()
     # print t,x,y,z
     return t,x,y,z
 
@@ -83,19 +83,9 @@ def main():
 			del data[0]
 
 
-		# if time.time()<start_time+1:
-		# 	time.sleep(sampleRate)
-		# 	continue
-		# elif:
-		# 	print "begin!\n"
-
 		#Get time, x, y, and z from serial port
 		data.append(get_data_from_serial())
 
-		#Peak detection
-		# detection=peak_detection()
-		# if detection ==True:
-		# 	data
 
 		#only look for reps after the min rep window
 		min_samples=int(min_rep_window/sampleRate)
@@ -120,6 +110,7 @@ def main():
 				# defined by latest datum not being max or min and 
 				# if the up or down motion caused at least .4 g
 				if (peak-dip>.6) and (dip< values[-1] < peak):
+					print axis
 
 					#direction of slope can tell you what to expect
 					if get_slope(axis) > 0:
@@ -129,10 +120,10 @@ def main():
 					# print curve
 					
 					#get the time for this point - halfway through the rep
-					halftime=timer()
+					halftime=time.time()
 
 					#wait and look for return to starting point
-					while timer()-halftime<=max_rep_window/2:
+					while time.time()-halftime<=max_rep_window/2:
 						data.append(get_data_from_serial())
 						if curve == "valley":
 							if data[-1][axis] >=peak-.2:
@@ -146,7 +137,7 @@ def main():
 								break
 			
 			
-		while timer()<=data[-1][0]+sampleRate:
+		while time.time()<=data[-1][0]+sampleRate:
 			pass
 		
 
