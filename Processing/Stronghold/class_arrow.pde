@@ -42,7 +42,7 @@ class Arrow {
     pathlength = sqrt((endx-startx)*(endx-startx) + (endy-starty)*(endy-starty));
     //println("Arrow path length: " + pathlength);
     angle = atan((endy-starty)/(endx-startx));
-    println("Arrow angle: " + angle/(PI/2));
+    //println("Arrow angle: " + angle/(PI/2));
   }
     
   void display() {

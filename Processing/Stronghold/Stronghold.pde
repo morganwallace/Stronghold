@@ -5,6 +5,9 @@
  * The game is over when the castle is too damaged.
 */
 
+// Import Java Date library
+import java.util.Date;
+
 PImage stronghold_bg;
 PImage explosion;
 String lines[];
@@ -39,6 +42,7 @@ int y_start_lower = round(screenheight - 20*character_scale);
 
 // Game setup, runs once on launch
 void setup() {
+  
   // Basic screen setup
   size(screenwidth, screenheight);
   background(0,0,0);
