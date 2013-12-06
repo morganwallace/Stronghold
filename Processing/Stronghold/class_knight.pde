@@ -7,7 +7,10 @@ class Knight {
   int lastShot = 0;   // Stores the time of the last shot
 
   Knight(float xpos_my, float ypos_my) {
+    // Load and resize knight image (scaling divided by 2, as original image is larger)
     image = loadImage("../../Assets/knight.png");
+    image.resize(round(image.width*character_scale/2),round(image.height*character_scale/2));
+
     xpos = xpos_my;
     ypos = ypos_my;  
   }
@@ -21,13 +24,7 @@ class Knight {
     // Figure out if waited long enough
     if(millis() > lastShot + wait) {
       lastShot = millis();
-      
-      /*
-      // Display black overlay to indicate shot
-      fill(0, 0, 0);
-      rect(0, 0, width, height);
-      */
-      
+            
       // Figure out which enemy is closest
       int closestEnemy = skeletons[0].index;
       for(int i=1; i<skeletons.length; i++) {
