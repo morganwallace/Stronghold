@@ -24,6 +24,7 @@ initialize_time=1 #second
 
 
 ser = serial.Serial('/dev/tty.usbmodem1421', 9600)
+# ser_toProcessing=serial.Serial('/dev/tty.usbmodem1422', 9600)
 # time.sleep(.5)
 
 def timer():
@@ -50,6 +51,7 @@ def get_slope(axis, samples=2):
 	run=data[-1][0] - data[-samples][0] #time change
 	return rise/run
 
+<<<<<<< HEAD
 
 def peak_detection():
 	global data
@@ -68,6 +70,24 @@ def peak_detection():
 		return True,
 	else:
 		return False
+=======
+def rep_event(root_times=(0,0,0)):
+	global reps
+	global data
+	reps+=1
+	print "reps: "+str(reps)
+	del(data[:-1])
+	with open('to_processing.txt','w') as out_file:
+		out_file.write(str(reps))
+
+	# serial_out_data="%f,%f,%f\n"%(root_times)
+	# print 'test1'
+	# ser.write("reps:"+str(reps))
+	# print 'test'
+	# test=ser.readline()
+	# print test 
+
+>>>>>>> peakstogame
 
 def main():
 	global data
@@ -103,7 +123,11 @@ def main():
 		if len(data)>=min_samples: 
 			
 			#find max and min for each axis - !must be a more effiecient way!
+<<<<<<< HEAD
 			for axis in (3,):
+=======
+			for axis in (1,2,3):
+>>>>>>> peakstogame
 				#isolate data for axis
 				values=[t[axis] for t in data]
 				#get max
@@ -117,11 +141,19 @@ def main():
 		# 	if data[-1][2]>xmax:xmax=data[-1][2]
 		# 	if data[-1][3]>xmax:xmax=data[-1][3]
 
+<<<<<<< HEAD
 				#return cycle
 				# defined by latest datum not being max or min and 
 				# if the up or down motion caused at least .4 g
 				if (peak-dip>.6) and (dip< values[-1] < peak):
 					# print "in the return cycle"
+=======
+				# last-half of cycle
+				# defined by latest datum not being max or min and 
+				# if the up or down motion caused at least .4 g
+				if (peak-dip>.6) and (dip< values[-1] < peak):
+
+>>>>>>> peakstogame
 					#direction of slope can tell you what to expect
 					if get_slope(axis) > 0:
 						curve="valley"
@@ -129,12 +161,20 @@ def main():
 						curve ="hill"
 					# print curve
 					
+<<<<<<< HEAD
 					halftime=timer()
 					#wait and look for return to starting
+=======
+					#get the time for this point - halfway through the rep
+					halftime=timer()
+
+					#wait and look for return to starting point
+>>>>>>> peakstogame
 					while timer()-halftime<=max_rep_window/2:
 						data.append(get_data_from_serial())
 						if curve == "valley":
 							if data[-1][axis] >=peak-.2:
+<<<<<<< HEAD
 								reps+=1
 								print "reps: "+str(reps)
 								del(data[:-1])
@@ -161,6 +201,18 @@ def main():
 			# 	data=[]
 		# print str((xSlope,xSlope2))
 		# ser.write("from python " +str(data))
+=======
+								
+								# rep_event(get_times(root1,root2,root3))
+								rep_event()
+								break
+						elif curve == "hill":
+							if data[-1][axis] <=dip+.2:
+								rep_event()
+								break
+			
+			
+>>>>>>> peakstogame
 		while timer()<=data[-1][0]+sampleRate:
 			pass
 		
