@@ -3,30 +3,36 @@ class Arrow {
   float xpos;
   float ypos;
   
+  Knight origin;
+  Skeleton target;
+  
   float startx;
   float starty;
   float endx;
   float endy;
     
-  float speed = 10;
-  
+  float speed = 10 * gamespeed;
   float angle;
   
   float pathlength;  // length of the path that the arrow travels
   
   int index;
+  boolean finished = false;
   
-  Arrow(float startx_my, float starty_my, float endx_my, float endy_my, int index_my) {
+  Arrow(Knight origin_my, Skeleton target_my, int index_my) {
     // load image for arrow
     image = loadImage("../../Assets/arrow.png");
     
     // scale images by monster_scale factor
     image.resize(round(image.width*monster_scale),round(image.height*monster_scale));
     
-    startx = startx_my;
-    starty = starty_my;
-    endx = endx_my;
-    endy = endy_my;
+    origin = origin_my;
+    target = target_my;
+    
+    float startx = origin.xpos + origin.image.width;
+    float starty = origin.ypos + origin.image.height/2;
+    float endx = target.xpos;
+    float endy = target.ypos + target.image_m.height/2;
     
     xpos = startx;
     ypos = starty;
@@ -52,12 +58,18 @@ class Arrow {
   }
   
   void move() {
-    xpos += speed;
-    ypos += speed*tan(angle);
+    if (xpos < target.xpos) {
+      xpos += speed;
+      ypos += speed*tan(angle);
+    }
+    else {
+      target.getHit(origin.damage);
+      finished = true;
+    }
   }
   
   boolean finished() {
-    return false;
+    return finished;
   }
   
 }

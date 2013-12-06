@@ -19,6 +19,7 @@ boolean gameOn;            // If false, game is over
 float gamespeed = 1.0;
 float walkingspeed = 0.2;
 float monster_scale = 2.0; // Scaling factor when drawing the monsters 
+int skeleton_number = 8;
 
 void setup() {
   size(640, 480);
@@ -34,9 +35,9 @@ void setup() {
   knight1 = new Knight(100, 100);
   
   // Create array of skeletons (with random speed)
-  skeletons = new Skeleton[4];
+  skeletons = new Skeleton[skeleton_number];
   for (int i = 0; i < skeletons.length; i++) {
-    skeletons[i] = new Skeleton(width, (i+1)*100, random(0.5, 1.5), 10, i);
+    skeletons[i] = new Skeleton(width, (i+1)*50+20, random(0.5, 1.5), 10, i);
   }
   
   arrows = new ArrayList<Arrow>(); 
@@ -59,9 +60,11 @@ void draw() {
       Arrow arrow = arrows.get(i);
       arrow.display();
       arrow.move();
+      
       if(arrow.finished()) {
         arrows.remove(i);
       }
+      
     }
     
     if(keyPressed) {
