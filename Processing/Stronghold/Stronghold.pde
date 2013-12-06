@@ -12,24 +12,25 @@ String lines[];
 int reps = 0;
 int previous_reps = 0;
 
-
+// Initialize objects
 Knight knight1, knight2;
 Skeleton[] skeletons;
 ArrayList<Arrow> arrows;
 int arrownumber = 1;
-
-float castleborder = 190;  // X coordinate of the wall of the castle
-float castlehealth;        // Health of the castle
-boolean gameOn;            // If false, game is over
-float gamespeed = 1.0;
-float walkingspeed = 0.2; 
-int skeleton_number = 8;
 
 // Screen setup
 float screen_scale = 1.0;      // Scaling factor when drawing the screen
 float character_scale = 2.0;   // Scaling factor when drawing the characters
 int screenwidth = round(640*screen_scale);
 int screenheight = round(480*screen_scale);
+
+// Game setup
+float castleborder = screenwidth*0.3;  // X coordinate of the wall of the castle
+float castlehealth;        // Health of the castle
+boolean gameOn;            // If false, game is over
+float gamespeed = 1.5;
+float walkingspeed = 0.2; 
+int skeleton_number = 8;
 
 // Positioning of monsters
 int y_start_position;
