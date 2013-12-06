@@ -7,6 +7,10 @@
 
 PImage stronghold_bg;
 PImage explosion;
+String lines[];
+//String reps=0;
+int previous_reps=0;
+
 
 Knight knight1;
 Skeleton[] skeletons;
@@ -65,6 +69,18 @@ void draw() {
         arrows.remove(i);
       }
       
+    }
+    
+    
+    //########## reps shoot skeletons
+    
+    //Load rep data from file
+    lines = loadStrings("player1.txt");
+    reps=Integer.parseInt(lines[0]);
+    if (reps>previous_reps){
+      knight1.shoot();
+      previous_reps=reps;
+      println(reps);
     }
     
     if(keyPressed) {
