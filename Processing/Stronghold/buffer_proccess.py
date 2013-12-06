@@ -57,7 +57,7 @@ def rep_event(root_times=(0,0,0)):
 	reps+=1
 	print "reps: "+str(reps)
 	del(data[:-1])
-	with open('to_processing.txt','w') as out_file:
+	with open('player1.txt','w') as out_file:
 		out_file.write(str(reps))
 
 	# serial_out_data="%f,%f,%f\n"%(root_times)
@@ -150,7 +150,5 @@ def main():
 			pass
 		
 
-
-main()
 if __name__ == '__main__':
 	main()
