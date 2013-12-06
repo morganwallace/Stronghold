@@ -2,7 +2,7 @@ class Knight {
   PImage image;
   float xpos;
   float ypos;
-  float damage = 5;   // Damage from each shot
+  float damage = 10;   // Damage from each shot
   int wait = 500;     // Time between shots
   int lastShot = 0;   // Stores the time of the last shot
 
@@ -38,9 +38,6 @@ class Knight {
       
       // Shoot arrow
       shootArrow(skeletons[closestEnemy]);      
-      
-      // Damage closest enemy (No longer needed, now in Arrow class) 
-      //skeletons[closestEnemy].getHit(damage);
     }
   }
   
