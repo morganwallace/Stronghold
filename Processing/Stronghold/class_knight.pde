@@ -46,19 +46,17 @@ class Knight {
   
   
   void shootArrow(Skeleton enemy) {
-    float startx = xpos+image.width;
-    float starty = ypos+image.height/2;
-    float endx = enemy.xpos;
-    float endy = enemy.ypos + enemy.image_m.height/2;
     
     /*
+    // Draw line from knight to enemy
     strokeWeight(5);
     stroke(0, 0, 0);
     line(startx, starty, endx, endy);
     */
     
-    arrows.add(new Arrow(startx, starty, endx, endy, arrownumber));
+    arrows.add(new Arrow(this, enemy, arrownumber));
     arrownumber++;
+    
   }
 
 }

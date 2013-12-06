@@ -16,17 +16,18 @@ class Arrow {
   
   int index;
   
-  Arrow(float startx_my, float starty_my, float endx_my, float endy_my, int index_my) {
+  Arrow(Knight origin, Skeleton target, int index_my) {
     // load image for arrow
     image = loadImage("../../Assets/arrow.png");
     
     // scale images by monster_scale factor
     image.resize(round(image.width*monster_scale),round(image.height*monster_scale));
     
-    startx = startx_my;
-    starty = starty_my;
-    endx = endx_my;
-    endy = endy_my;
+    
+    float startx = origin.xpos + origin.image.width;
+    float starty = origin.ypos + origin.image.height/2;
+    float endx = target.xpos;
+    float endy = target.ypos + target.image_m.height/2;
     
     xpos = startx;
     ypos = starty;
