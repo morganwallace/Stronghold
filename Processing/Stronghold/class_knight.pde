@@ -23,7 +23,7 @@ class Knight {
   }
   
   // Function to shoot an enemy with an arrow
-  void shoot() {
+  void shoot(int rank) {
     
     // Figure out if waited long enough
     Date d = new Date();
@@ -39,24 +39,31 @@ class Knight {
         }
       }
       
-      // Shoot arrow
-      shootArrow(skeletons[closestEnemy]);      
+      // Figure out which enemy is second closest
+      int secondClosestEnemy = skeletons[0].index;
+      for(int i=1; i<skeletons.length; i++) {
+        if(skeletons[i].xpos != skeletons[closestEnemy].xpos) { 
+          if(skeletons[i].xpos < skeletons[secondClosestEnemy].xpos ) {
+            secondClosestEnemy = skeletons[i].index;
+          }
+        }
+      }
+
+      // Shoot arrow at closest or second closest enemy, depending on rank variable
+      if(rank == 1) {
+        shootArrow(skeletons[closestEnemy]);
+      }
+      if(rank == 2) {
+        shootArrow(skeletons[secondClosestEnemy]);
+      }
+      
     }
   }
   
   
   void shootArrow(Skeleton enemy) {
-    
-    /*
-    // Draw line from knight to enemy
-    strokeWeight(5);
-    stroke(0, 0, 0);
-    line(startx, starty, endx, endy);
-    */
-    
     arrows.add(new Arrow(this, enemy, arrownumber));
     arrownumber++;
-    
   }
 
 }

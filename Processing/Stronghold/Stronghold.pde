@@ -110,7 +110,7 @@ void draw() {
     lines = loadStrings("player1.txt");
     reps=Integer.parseInt(lines[0]);
     if (reps>previous_reps){
-      knight1.shoot();
+      knight1.shoot(1);
       previous_reps=reps;
       println(reps);
     }
@@ -119,12 +119,12 @@ void draw() {
     if(keyPressed) {
       // Shoot arrow from player 1 if key 'A' is pressed
       if (key == 'a' || key == 'A') {
-        knight1.shoot();
+        knight1.shoot(1);
       }
       
       // Shoot arrow from player 2 if key 'B' is pressed
       if (key == 'l' || key == 'L') {
-        knight2.shoot();
+        knight2.shoot(2);
       }
       
     }
