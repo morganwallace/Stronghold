@@ -204,6 +204,8 @@ def main():
     global data2
     global reps
     global reps2
+    global reps3
+    global reps4
     global sampleRate
     global max_rep_window
     global min_rep_window
