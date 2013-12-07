@@ -3,11 +3,14 @@ class Knight {
   float xpos;
   float ypos;
   float damage = 10;   // Damage from each shot
+  float repaired = 5;
   
   // Time-related variables
   long current;
   long lastShot = 0;   // Stores the time of the last shot
-  long wait = 500;     // Time between shots
+  long lastRepair = 0;   // Stores the time of the last repair
+  long waitShoot = 500;     // Time between shots
+  long waitRepair = 500;     // Time between repairs
 
   Knight(float xpos_my, float ypos_my) {
     // Load and resize knight image (scaling divided by 2, as original image is larger)
@@ -28,7 +31,7 @@ class Knight {
     // Figure out if waited long enough
     Date d = new Date();
     current = d.getTime();
-    if(current > lastShot + wait) {
+    if(current > lastShot + waitShoot) {
       lastShot = current;
 
       // Figure out which enemy is closest
@@ -60,10 +63,27 @@ class Knight {
     }
   }
   
-  
   void shootArrow(Skeleton enemy) {
     arrows.add(new Arrow(this, enemy, arrownumber));
     arrownumber++;
+  }
+  
+  void repair() {
+    // Figure out if waited long enough
+    Date d = new Date();
+    current = d.getTime();
+    if(current > lastRepair + waitRepair) {
+      lastRepair = current;
+      repairAnimation();
+      if(castlehealth < castlehealthMax) {
+        castlehealth += repaired;
+      }
+    }
+  }
+
+  void repairAnimation() {
+    repairbubbles.add(new RepairBubble(this, repairnumber));
+    repairnumber++;
   }
 
 }

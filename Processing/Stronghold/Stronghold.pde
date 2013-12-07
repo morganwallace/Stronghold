@@ -1,7 +1,8 @@
 /* Stronghold Game
  * 
  * Defend the castle from the enemies!
- * Use the 'A' button on your keyboard to shoot them.
+ * Use the 'A' or 'L' button on your keyboard to shoot them.
+ * Use the 'Q' or 'O' button to repair your castle.
  * The game is over when the castle is too damaged.
 */
 
@@ -20,16 +21,19 @@ Knight knight1, knight2;
 Skeleton[] skeletons;
 ArrayList<Arrow> arrows;
 int arrownumber = 1;
+ArrayList<RepairBubble> repairbubbles;
+int repairnumber = 1;
 
 // Screen setup
-float screen_scale = 1.0;      // Scaling factor when drawing the screen
-float character_scale = 2.0;   // Scaling factor when drawing the characters
+float screen_scale = 1.5;      // Scaling factor when drawing the screen
+float character_scale = screen_scale * 2;   // Scaling factor when drawing the characters
 int screenwidth = round(640*screen_scale);
 int screenheight = round(480*screen_scale);
 
 // Game setup
 float castleborder = screenwidth*0.3;  // X coordinate of the wall of the castle
-float castlehealth;        // Health of the castle
+float castlehealth = 100;        // Health of the castle
+float castlehealthMax = 200;     // Maximum health of the castle
 boolean gameOn;            // If false, game is over
 float gamespeed = 1.5;
 float walkingspeed = 0.2; 
@@ -48,7 +52,6 @@ void setup() {
   background(0,0,0);
   frameRate(30);
   
-  castlehealth = 100;
   gameOn = true;
   
   // Load and resize background image
@@ -74,7 +77,10 @@ void setup() {
   }
   
   // Create array list (= array of variable length) of arrows
-  arrows = new ArrayList<Arrow>(); 
+  arrows = new ArrayList<Arrow>();
+ 
+ // Create array list (= array of variable length) of repair bubble
+  repairbubbles = new ArrayList<RepairBubble>(); 
 }
 
 // Main game logic, looped as long as game runs
@@ -99,11 +105,19 @@ void draw() {
       
       if(arrow.finished()) {
         arrows.remove(i);
-      }
-      
+      } 
     }
     
-    
+    for (int i = repairbubbles.size()-1; i >= 0; i--) {
+      RepairBubble repairbubble = repairbubbles.get(i);
+      repairbubble.display();
+      repairbubble.move();
+      
+      if(repairbubble.finished()) {
+        repairbubbles.remove(i);
+      } 
+    }
+        
     //########## reps shoot skeletons
     
     //Load rep data from file
@@ -125,6 +139,16 @@ void draw() {
       // Shoot arrow from player 2 if key 'B' is pressed
       if (key == 'l' || key == 'L') {
         knight2.shoot(2);
+      }
+      
+      // Castle repair from player 1 if key 'Q' is pressed
+      if (key == 'q' || key == 'Q') {
+        knight1.repair();
+      }
+      
+      // Castle repair from player 2 if key 'O' is pressed
+      if (key == 'o' || key == 'O') {
+        knight2.repair();
       }
       
     }
