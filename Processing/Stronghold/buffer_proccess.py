@@ -54,23 +54,36 @@ def get_slope(axis,datalist, samples=2):
 	run=datalist[-1][0] - datalist[-samples][0] #time change
 	return rise/run
 
-def rep_event(player, root_times=(0,0,0)):
+def rep_event(player,exer, root_times=(0,0,0)):
     global reps
     global data
     global reps2
-    if (player==1):
+    global reps3
+    global reps4
+    if ((player==1) and (exer==3)):
         reps+=1
-        print "Player1:" + "reps: "+str(reps)
+        print "Player1 shooting:" + "reps: "+str(reps)
         del(data[:-1])
-        with open("player1.txt" ,'w') as out_file:
+        with open("player1shoot.txt" ,'w') as out_file:
             out_file.write(str(reps))
-    else:
+    elif ((player==1) and (exer !=3)):
         reps2+=1
-        print "Player2:" + "reps: "+str(reps2)
+        print "Player1 repair:" + "reps: "+str(reps2)
         del(data2[:-1])
-        with open("player2.txt" ,'w') as out_file:
+        with open("player2repair.txt" ,'w') as out_file:
             out_file.write(str(reps2))
-
+    elif ((player==2) and (exer==3)):
+        reps3+=1
+        print "Player2 shooting:" + "reps: "+str(reps3)
+        del(data[:-1])
+        with open("player2shoot.txt" ,'w') as out_file:
+            out_file.write(str(rep3))
+    elif ((player==2) and (exer !=3)):
+        reps4+=1
+        print "Player2 repair:" + "reps: "+str(reps4)
+        del(data2[:-1])
+        with open("player2repair.txt" ,'w') as out_file:
+            out_file.write(str(reps4))
 
 	# serial_out_data="%f,%f,%f\n"%(root_times)
 	# print 'test1'
@@ -106,6 +119,7 @@ def calc_reps(d):
                 # if the up or down motion caused at least .4 g
                 if (peak-dip>.6) and (dip< values[-1] < peak):
                     print axis
+                    exercise = axis
 
                     #direction of slope can tell you what to expect
                     if get_slope(axis, data) > 0:
@@ -124,11 +138,11 @@ def calc_reps(d):
                             if data[-1][axis] >=peak-.2:
 
                                 # rep_event(get_times(root1,root2,root3))
-                                rep_event(d)
+                                rep_event(d, exercise)
                                 break
                         elif curve == "hill":
                             if data[-1][axis] <=dip+.2:
-                                rep_event(d)
+                                rep_event(d, exercise)
                                 break
     elif d==2:
         #only look for reps after the min rep window
@@ -157,6 +171,7 @@ def calc_reps(d):
                         # if the up or down motion caused at least .4 g
                         if (peak-dip>.6) and (dip< values[-1] < peak):
                             print axis
+                            exercise = axis
 
                             #direction of slope can tell you what to expect
                             if get_slope(axis, data2) > 0:
@@ -175,11 +190,11 @@ def calc_reps(d):
                                     if data2[-1][axis] >=peak-.2:
 
                                         # rep_event(get_times(root1,root2,root3))
-                                        rep_event(d)
+                                        rep_event(d, exercise)
                                         break
                                 elif curve == "hill":
                                     if data2[-1][axis] <=dip+.2:
-                                        rep_event(d)
+                                        rep_event(d, exercise)
                                         break
 
 
