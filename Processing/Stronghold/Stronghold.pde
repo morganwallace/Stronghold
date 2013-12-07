@@ -21,10 +21,12 @@ Knight knight1, knight2;
 Skeleton[] skeletons;
 ArrayList<Arrow> arrows;
 int arrownumber = 1;
+ArrayList<RepairBubble> repairbubbles;
+int repairnumber = 1;
 
 // Screen setup
-float screen_scale = 1.0;      // Scaling factor when drawing the screen
-float character_scale = 2.0;   // Scaling factor when drawing the characters
+float screen_scale = 1.5;      // Scaling factor when drawing the screen
+float character_scale = screen_scale * 2;   // Scaling factor when drawing the characters
 int screenwidth = round(640*screen_scale);
 int screenheight = round(480*screen_scale);
 
@@ -75,7 +77,10 @@ void setup() {
   }
   
   // Create array list (= array of variable length) of arrows
-  arrows = new ArrayList<Arrow>(); 
+  arrows = new ArrayList<Arrow>();
+ 
+ // Create array list (= array of variable length) of repair bubble
+  repairbubbles = new ArrayList<RepairBubble>(); 
 }
 
 // Main game logic, looped as long as game runs
@@ -100,11 +105,19 @@ void draw() {
       
       if(arrow.finished()) {
         arrows.remove(i);
-      }
-      
+      } 
     }
     
-    
+    for (int i = repairbubbles.size()-1; i >= 0; i--) {
+      RepairBubble repairbubble = repairbubbles.get(i);
+      repairbubble.display();
+      repairbubble.move();
+      
+      if(repairbubble.finished()) {
+        repairbubbles.remove(i);
+      } 
+    }
+        
     //########## reps shoot skeletons
     
     //Load rep data from file
@@ -134,7 +147,7 @@ void draw() {
       }
       
       // Castle repair from player 2 if key 'O' is pressed
-      if (key == 'O' || key == 'O') {
+      if (key == 'o' || key == 'O') {
         knight2.repair();
       }
       

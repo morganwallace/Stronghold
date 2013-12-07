@@ -69,16 +69,21 @@ class Knight {
   }
   
   void repair() {
-        // Figure out if waited long enough
+    // Figure out if waited long enough
     Date d = new Date();
     current = d.getTime();
     if(current > lastRepair + waitRepair) {
       lastRepair = current;
+      repairAnimation();
       if(castlehealth < castlehealthMax) {
         castlehealth += repaired;
       }
     }
-    
+  }
+
+  void repairAnimation() {
+    repairbubbles.add(new RepairBubble(this, repairnumber));
+    repairnumber++;
   }
 
 }
