@@ -13,8 +13,19 @@ PImage stronghold_bg;
 PImage explosion;
 String lines[];
 
-int reps = 0;
-int previous_reps = 0;
+// Repetition counters for dumbbell input
+int reps_1s = 0;
+int previous_reps_1s = 0;
+
+int reps_2s = 0;
+int previous_reps_2s = 0;
+
+int reps_1r = 0;
+int previous_reps_1r = 0;
+
+int reps_2r = 0;
+int previous_reps_2r = 0;
+
 
 // Initialize objects
 Knight knight1, knight2;
@@ -118,18 +129,46 @@ void draw() {
       } 
     }
         
-    //########## reps shoot skeletons
+        
+    // ##### DUMBBELL INPUT #####
     
     //Load rep data from file
-    lines = loadStrings("player1.txt");
-    reps=Integer.parseInt(lines[0]);
-    if (reps>previous_reps){
+    lines = loadStrings("player1shoot.txt");
+    reps_1s=Integer.parseInt(lines[0]);
+    if (reps_1s>previous_reps_1s){
       knight1.shoot(1);
-      previous_reps=reps;
-      println(reps);
+      previous_reps_1s=reps_1s;
+      println(reps_1s);
     }
     
-    // Look for key presses
+    lines = loadStrings("player2shoot.txt");
+    reps_2s=Integer.parseInt(lines[0]);
+    if (reps_2s>previous_reps_2s){
+      knight2.shoot(2);
+      previous_reps_2s=reps_2s;
+      println(reps_2s);
+    }
+    
+    lines = loadStrings("player1repair.txt");
+    reps_1r=Integer.parseInt(lines[0]);
+    if (reps_1r>previous_reps_1r){
+      knight1.repair();
+      previous_reps_1r=reps_1r;
+      println(reps_1r);
+    }
+    
+    lines = loadStrings("player2repair.txt");
+    reps_2r=Integer.parseInt(lines[0]);
+    if (reps_2r>previous_reps_2r){
+      knight2.repair();
+      previous_reps_2r=reps_2r;
+      println(reps_2r);
+    }
+    
+    
+    
+    // ##### KEYBOARD INPUT #####
+    
     if(keyPressed) {
       // Shoot arrow from player 1 if key 'A' is pressed
       if (key == 'a' || key == 'A') {
