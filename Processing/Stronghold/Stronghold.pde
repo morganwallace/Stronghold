@@ -1,7 +1,8 @@
 /* Stronghold Game
  * 
  * Defend the castle from the enemies!
- * Use the 'A' button on your keyboard to shoot them.
+ * Use the 'A' or 'L' button on your keyboard to shoot them.
+ * Use the 'Q' or 'O' button to repair your castle.
  * The game is over when the castle is too damaged.
 */
 
@@ -29,7 +30,8 @@ int screenheight = round(480*screen_scale);
 
 // Game setup
 float castleborder = screenwidth*0.3;  // X coordinate of the wall of the castle
-float castlehealth;        // Health of the castle
+float castlehealth = 100;        // Health of the castle
+float castlehealthMax = 200;     // Maximum health of the castle
 boolean gameOn;            // If false, game is over
 float gamespeed = 1.5;
 float walkingspeed = 0.2; 
@@ -48,7 +50,6 @@ void setup() {
   background(0,0,0);
   frameRate(30);
   
-  castlehealth = 100;
   gameOn = true;
   
   // Load and resize background image
@@ -125,6 +126,16 @@ void draw() {
       // Shoot arrow from player 2 if key 'B' is pressed
       if (key == 'l' || key == 'L') {
         knight2.shoot(2);
+      }
+      
+      // Castle repair from player 1 if key 'Q' is pressed
+      if (key == 'q' || key == 'Q') {
+        knight1.repair();
+      }
+      
+      // Castle repair from player 2 if key 'O' is pressed
+      if (key == 'O' || key == 'O') {
+        knight2.repair();
       }
       
     }
