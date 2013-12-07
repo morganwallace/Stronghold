@@ -60,25 +60,25 @@ def rep_event(player,exer, root_times=(0,0,0)):
     global reps2
     global reps3
     global reps4
-    if ((player==1) and (exer==3)):
+    if ((player==1) and (exer==2)):
         reps+=1
         print "Player1 shooting:" + "reps: "+str(reps)
         del(data[:-1])
         with open("player1shoot.txt" ,'w') as out_file:
             out_file.write(str(reps))
-    elif ((player==1) and (exer !=3)):
+    elif ((player==1) and (exer !=2)):
         reps2+=1
         print "Player1 repair:" + "reps: "+str(reps2)
         del(data2[:-1])
         with open("player2repair.txt" ,'w') as out_file:
             out_file.write(str(reps2))
-    elif ((player==2) and (exer==3)):
+    elif ((player==2) and (exer==2)):
         reps3+=1
         print "Player2 shooting:" + "reps: "+str(reps3)
         del(data[:-1])
         with open("player2shoot.txt" ,'w') as out_file:
             out_file.write(str(rep3))
-    elif ((player==2) and (exer !=3)):
+    elif ((player==2) and (exer !=2)):
         reps4+=1
         print "Player2 repair:" + "reps: "+str(reps4)
         del(data2[:-1])
