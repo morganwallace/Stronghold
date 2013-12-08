@@ -12,18 +12,14 @@ float xpos;
 float freq;
 boolean peak;
 float angle = 0;
+String image_path;
 
 Sync( float xpos_my, float ypos_my, float freq_my){
  ypos = ypos_my;
  xpos = xpos_my;
  freq = freq_my;
- 
- // load image for arrow
- image = loadImage("../../Assets/progress_blue_up.png");
-    
- // scale images by character_scale factor
- image.resize(round(image.width*screen_scale),round(image.height*screen_scale));
-    
+ image_path = "../../Assets/progress_blue_up.png";
+ load_image(image_path);    
 }
 
 
@@ -36,14 +32,25 @@ void display(){
    
     if (y <= ypos - 40){
       peak = true;  
+      image_path = "../../Assets/progress_red_up.png";
+      load_image(image_path);
     } else {
       peak = false;
+      image_path = "../../Assets/progress_blue_up.png";
+      load_image(image_path);
     }
    
-    angle += 1;
+    angle += freq;
 }
 
 boolean peak(){
 return peak;
+}
+
+void load_image(String path){
+ // load image using path
+ image = loadImage(path);
+ // scale images by screen_scale factor
+ image.resize(round(image.width*screen_scale),round(image.height*screen_scale));
 }
 }
