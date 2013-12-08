@@ -94,5 +94,10 @@ void runGame() {
       knight2.repair();
     }
     
+    // Pause game if Space bar key is pressed
+    if (key == ' ') {
+      mode = 'p';
+    }
+    
   }
 }

@@ -129,3 +129,16 @@ void drawHealthBar (int posx, int posy, float health) {
   noStroke();
   rect(posx, posy, posx+health, posy+10);
 }
+
+/*void wait (long waitTime) {
+  Date d = new Date();
+  long lastTime = 0;
+  long currentTime = d.getTime();
+  if(currentTime > lastTime + waitTime) {
+    lastPause = currentTime;
+    if (key == ' ') {
+      mode = 'r';
+      }
+    }
+}
+*/
