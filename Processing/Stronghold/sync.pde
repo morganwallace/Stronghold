@@ -5,49 +5,74 @@
 //        Indicator frequency (integer which is converted into radians)
 //Outputs: An object moving at a set frequency
 //
+
 class Sync{
-PImage image;  
-float ypos;
-float xpos;
-float freq;
-boolean peak;
-float angle = 0;
-String image_path;
+PImage image;    //Image object 
+String colour;   //To choose a different png based on color
+
+//Position related variables
+float ypos;      //Initial Y-Position 
+float xpos;      //Initial X-Position 
+float y;         //Current position 
+float freq;      //Frequency of the cycle
+float angle = 0; //Cosine angle initialization 
+
+boolean peak;    //Detecting if the object is at the peak of the cycle
+boolean top_reached; 
+boolean bottom_reached;
 
 Sync( float xpos_my, float ypos_my, float freq_my){
  ypos = ypos_my;
  xpos = xpos_my;
  freq = freq_my;
- image_path = "../../Assets/progress_blue_up.png";
- load_image(image_path);    
+ load_image("blue");    
 }
 
-
 void display(){
-    float y;
     float ang = radians(angle);
+//Calculate the current positon of the object
     y = ypos + (50 * cos(ang));
-
-    image(image, xpos , y);
-   
+//Load the image at the positio calculated 
+    image(image, xpos , y);   
+//Check if the object is in the peak range currently range set to +-40 
     if (y <= ypos - 40){
-      peak = true;  
-      image_path = "../../Assets/progress_red_up.png";
-      load_image(image_path);
+      peak = true;     
     } else {
       peak = false;
-      image_path = "../../Assets/progress_blue_up.png";
-      load_image(image_path);
     }
-   
+//Reset the image  
+    load_image("blue");
+//Increment the angle by freq
     angle += freq;
 }
 
 boolean peak(){
+//function to query whether the object is in the peak range  
 return peak;
 }
 
-void load_image(String path){
+void load_image(String colour){
+//Load the images based on the color specified and the direction of the object  
+ String direction; 
+ String path;
+ 
+ //Query current Y-position to set top or bottom reached and change direction
+  if (y == ypos + 50){
+     top_reached = true;
+     bottom_reached = false;
+   } else if (y == ypos - 50){
+     top_reached = false;
+     bottom_reached = true;
+   }
+   
+ //change directions
+ if (top_reached){
+ direction = "up";
+ } else {
+ direction = "down";}
+ 
+ //set image path
+ path = "../../Assets/progress_"+colour+"_"+direction+".png";
  // load image using path
  image = loadImage(path);
  // scale images by screen_scale factor

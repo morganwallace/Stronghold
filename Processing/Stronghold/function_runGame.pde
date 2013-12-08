@@ -8,7 +8,8 @@ void runGame() {
   knight1.display(); 
   knight2.display();
   sync1.display();
-     
+  sync2.display();   
+  
   for (int i = 0; i < skeletons.length; i++) {
     skeletons[i].display();
     skeletons[i].move();
@@ -77,14 +78,24 @@ void runGame() {
   if(keyPressed) {
     // Shoot arrow from player 1 if key 'A' is pressed
     if (key == 'a' || key == 'A') {
-      if(sync1.peak()) {
+      //Shoot only if the input conforms to the frequency of the sync object
+      //i.e. if the key is hit when object is in the peak range 
+      if (sync1.peak()){
         knight1.shoot(1);
+        //change color of the object in order to identify positive identification
+        sync1.load_image("red");
       }
     }
     
     // Shoot arrow from player 2 if key 'B' is pressed
     if (key == 'l' || key == 'L') {
-      knight2.shoot(2);
+      //Shoot only if the input conforms to the frequency of the sync object
+      //i.e. if the key is hit when object is in the peak range 
+      if (sync2.peak()){
+        knight2.shoot(2);
+        //change color of the object in order to identify positive identification
+        sync2.load_image("red");
+      }
     }
     
     // Castle repair from player 1 if key 'Q' is pressed
