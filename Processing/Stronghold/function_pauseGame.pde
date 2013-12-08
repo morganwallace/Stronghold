@@ -13,8 +13,7 @@ void pauseGame() {
   // Add pause screen image over it
   image(pausescreen, 0, 0);
   
-  // Figure out if waited long enough
-
+  // Unpause game if waited long enough
   if(keyPressed) {
     Date d = new Date();
     long currentTime = d.getTime();

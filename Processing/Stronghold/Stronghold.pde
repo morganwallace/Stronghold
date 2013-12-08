@@ -47,15 +47,15 @@ int screenheight = round(480*screen_scale);
 
 // Game setup
 float castleborder = screenwidth*0.3;  // X coordinate of the wall of the castle
-float castlehealth = 100;        // Health of the castle
+float castlehealthinit = 100;        // Initial health of the castle
+float castlehealth;
 float castlehealthMax = 200;     // Maximum health of the castle
-boolean gameOn;            // If false, game is over
 float gamespeed = 1.5;
 float walkingspeed = 0.2; 
 int skeleton_number = 8;
 
 // Game mode variable switches between "start", "run", "pause" and "end" screen
-char mode = 's';
+char mode;
 
 // Positioning of monsters
 int y_start_position;
@@ -73,8 +73,6 @@ void setup() {
   size(screenwidth, screenheight);
   background(0,0,0);
   frameRate(30);
-  
-  gameOn = true;
   
   // Load and resize background image
   stronghold_bg = loadImage("../../Assets/stronghold_bg.png");
@@ -119,6 +117,8 @@ void setup() {
  
  // Create array list (= array of variable length) of repair bubble
   repairbubbles = new ArrayList<RepairBubble>(); 
+  
+  reset();
 }
 
 // Draw screens (game itself as well as start and end screen)
@@ -137,14 +137,6 @@ void draw() {
       endGame();
       break;
   }
-  /*
-  if(gameOn) {
-    runGame();
-  }
-  else{
-    endGame();
-  }
-  */
 }
 
 // Draws the health bar
