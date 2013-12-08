@@ -7,6 +7,7 @@ void runGame() {
 
   knight1.display(); 
   knight2.display();
+  sync1.display();
      
   for (int i = 0; i < skeletons.length; i++) {
     skeletons[i].display();
@@ -76,7 +77,9 @@ void runGame() {
   if(keyPressed) {
     // Shoot arrow from player 1 if key 'A' is pressed
     if (key == 'a' || key == 'A') {
-      knight1.shoot(1);
+      if (sync1.peak()){
+        knight1.shoot(1);
+      }
     }
     
     // Shoot arrow from player 2 if key 'B' is pressed

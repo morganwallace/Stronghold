@@ -34,6 +34,7 @@ ArrayList<Arrow> arrows;
 int arrownumber = 1;
 ArrayList<RepairBubble> repairbubbles;
 int repairnumber = 1;
+Sync sync1;
 
 // Screen setup
 float screen_scale = 1.5;      // Scaling factor when drawing the screen
@@ -79,6 +80,9 @@ void setup() {
   // Initialize two knights with variable coordinates
   knight1 = new Knight(width/6, height/8);
   knight2 = new Knight(width/6, height/3);
+  
+  // Initialize sync with variable coordinates
+  sync1   = new Sync(width/5, height/7, 2);
   
   // Create array of skeletons
   skeletons = new Skeleton[skeleton_number];
