@@ -7,10 +7,7 @@ void endGame() {
   fill(0, 0, 0, 200);
   noStroke();
   rect(0, 0, width, height);
-<<<<<<< HEAD
   
   // Add pause screen image over it
   image(endscreen, 0, 0);
-=======
->>>>>>> a6ce7441a97315854ed641f464f73c0843fb2cb4
 }

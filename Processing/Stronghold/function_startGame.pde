@@ -8,7 +8,6 @@ void startGame() {
   noStroke();
   rect(0, 0, width, height);
   
-<<<<<<< HEAD
   // Add pause screen image over it
   image(startscreen, 0, 0);
   
@@ -21,7 +20,4 @@ void startGame() {
       }
   }
   //gameOn = true;
-=======
-  gameOn = true;
->>>>>>> a6ce7441a97315854ed641f464f73c0843fb2cb4
 }

@@ -71,8 +71,7 @@ class Skeleton {
      castlehealth -= 10;
 
      if(castlehealth <= 0) {
-       mode = 'e'; // end game
-       //gameOn = false;
+       gameOn = false;
      }
     } 
   }
