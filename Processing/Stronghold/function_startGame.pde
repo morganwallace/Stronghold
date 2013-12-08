@@ -12,12 +12,15 @@ void startGame() {
   image(startscreen, 0, 0);
   
   
+  // Unpause game if waited long enough
   if(keyPressed) {
     Date d = new Date();
-    lastPause = d.getTime();
+    long currentTime = d.getTime();
+    if(currentTime > lastPause + waitPause) {
+      lastPause = currentTime;
       if (key == ' ') {
         mode = 'r';
       }
+    }
   }
-  //gameOn = true;
 }
