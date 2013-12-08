@@ -100,12 +100,24 @@ void runGame() {
     
     // Castle repair from player 1 if key 'Q' is pressed
     if (key == 'q' || key == 'Q') {
+      //Repair only if the input conforms to the frequency of the sync object
+      //i.e. if the key is hit when object is in the peak range 
+      if (sync1.peak()){
       knight1.repair();
+        //change color of the object in order to identify positive identification
+        sync1.load_image("red");
+      }
     }
     
     // Castle repair from player 2 if key 'O' is pressed
     if (key == 'o' || key == 'O') {
+      //Repair only if the input conforms to the frequency of the sync object
+      //i.e. if the key is hit when object is in the peak range 
+      if (sync2.peak()){
       knight2.repair();
+        //change color of the object in order to identify positive identification
+        sync2.load_image("red");
+      }
     }
     
     // Pause game if Space bar key is pressed
