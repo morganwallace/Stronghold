@@ -1,8 +1,5 @@
 // #### Main game logic, looped as long as game runs
 
-long lastPause = 0;
-long waitPause = 500;
-
 void runGame() { 
   image(stronghold_bg, 0, 0);
   

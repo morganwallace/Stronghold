@@ -10,6 +10,7 @@
 import java.util.Date;
 
 PImage stronghold_bg;
+PImage startscreen;
 PImage pausescreen;
 PImage explosion;
 String lines[];
@@ -52,12 +53,16 @@ float walkingspeed = 0.2;
 int skeleton_number = 8;
 
 // Game mode variable switches between "start", "run", "pause" and "end" screen
-char mode = 'r';
+char mode = 's';
 
 // Positioning of monsters
 int y_start_position;
 int y_start_upper = round(80*screen_scale);
 int y_start_lower = round(screenheight - 20*character_scale);
+
+// Variables to avoid repeat triggering of key events
+long lastPause = 0;
+long waitPause = 500;
 
 // Game setup, runs once on launch
 void setup() {
@@ -73,6 +78,10 @@ void setup() {
   stronghold_bg = loadImage("../../Assets/stronghold_bg.png");
   stronghold_bg.resize(round(stronghold_bg.width*screen_scale),round(stronghold_bg.height*screen_scale));
   
+  // Load and resize pause screen image
+  startscreen = loadImage("../../Assets/startscreen.png");
+  startscreen.resize(round(startscreen.width*screen_scale),round(startscreen.height*screen_scale));
+
   // Load and resize pause screen image
   pausescreen = loadImage("../../Assets/pausescreen.png");
   pausescreen.resize(round(pausescreen.width*screen_scale),round(pausescreen.height*screen_scale));
@@ -134,16 +143,3 @@ void drawHealthBar (int posx, int posy, float health) {
   noStroke();
   rect(posx, posy, posx+health, posy+10);
 }
-
-/*void wait (long waitTime) {
-  Date d = new Date();
-  long lastTime = 0;
-  long currentTime = d.getTime();
-  if(currentTime > lastTime + waitTime) {
-    lastPause = currentTime;
-    if (key == ' ') {
-      mode = 'r';
-      }
-    }
-}
-*/
