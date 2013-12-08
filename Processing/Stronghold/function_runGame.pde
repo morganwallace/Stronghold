@@ -7,6 +7,10 @@ void runGame() {
 
   knight1.display(); 
   knight2.display();
+<<<<<<< HEAD
+=======
+  sync1.display();
+>>>>>>> a6ce7441a97315854ed641f464f73c0843fb2cb4
      
   for (int i = 0; i < skeletons.length; i++) {
     skeletons[i].display();
@@ -76,7 +80,13 @@ void runGame() {
   if(keyPressed) {
     // Shoot arrow from player 1 if key 'A' is pressed
     if (key == 'a' || key == 'A') {
+<<<<<<< HEAD
       knight1.shoot(1);
+=======
+      if (sync1.peak()){
+        knight1.shoot(1);
+      }
+>>>>>>> a6ce7441a97315854ed641f464f73c0843fb2cb4
     }
     
     // Shoot arrow from player 2 if key 'B' is pressed
@@ -96,6 +106,7 @@ void runGame() {
     
     // Pause game if Space bar key is pressed
     if (key == ' ') {
+<<<<<<< HEAD
       Date d = new Date();
       long currentTime = d.getTime();
       if(currentTime > lastPause + waitPause) {
@@ -103,5 +114,10 @@ void runGame() {
         mode = 'p';
       }
      }
+=======
+      mode = 'p';
+    }
+    
+>>>>>>> a6ce7441a97315854ed641f464f73c0843fb2cb4
   }
 }

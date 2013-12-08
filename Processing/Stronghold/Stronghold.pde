@@ -37,6 +37,7 @@ ArrayList<Arrow> arrows;
 int arrownumber = 1;
 ArrayList<RepairBubble> repairbubbles;
 int repairnumber = 1;
+Sync sync1;
 
 // Screen setup
 float screen_scale = 1.5;      // Scaling factor when drawing the screen
@@ -54,7 +55,11 @@ float walkingspeed = 0.2;
 int skeleton_number = 8;
 
 // Game mode variable switches between "start", "run", "pause" and "end" screen
+<<<<<<< HEAD
 char mode = 's';
+=======
+char mode = 'r';
+>>>>>>> a6ce7441a97315854ed641f464f73c0843fb2cb4
 
 // Positioning of monsters
 int y_start_position;
@@ -98,6 +103,9 @@ void setup() {
   // Initialize two knights with variable coordinates
   knight1 = new Knight(width/6, height/8);
   knight2 = new Knight(width/6, height/3);
+  
+  // Initialize sync with variable coordinates
+  sync1   = new Sync(width/5, height/7, 2);
   
   // Create array of skeletons
   skeletons = new Skeleton[skeleton_number];
@@ -148,3 +156,19 @@ void drawHealthBar (int posx, int posy, float health) {
   noStroke();
   rect(posx, posy, posx+health, posy+10);
 }
+<<<<<<< HEAD
+=======
+
+/*void wait (long waitTime) {
+  Date d = new Date();
+  long lastTime = 0;
+  long currentTime = d.getTime();
+  if(currentTime > lastTime + waitTime) {
+    lastPause = currentTime;
+    if (key == ' ') {
+      mode = 'r';
+      }
+    }
+}
+*/
+>>>>>>> a6ce7441a97315854ed641f464f73c0843fb2cb4
