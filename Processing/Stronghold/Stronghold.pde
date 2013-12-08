@@ -49,7 +49,6 @@ int screenheight = round(480*screen_scale);
 float castleborder = screenwidth*0.3;  // X coordinate of the wall of the castle
 float castlehealth = 100;        // Health of the castle
 float castlehealthMax = 200;     // Maximum health of the castle
-boolean gameOn;            // If false, game is over
 float gamespeed = 1.5;
 float walkingspeed = 0.2; 
 int skeleton_number = 8;
@@ -73,8 +72,6 @@ void setup() {
   size(screenwidth, screenheight);
   background(0,0,0);
   frameRate(30);
-  
-  gameOn = true;
   
   // Load and resize background image
   stronghold_bg = loadImage("../../Assets/stronghold_bg.png");
@@ -136,14 +133,6 @@ void draw() {
       endGame();
       break;
   }
-  /*
-  if(gameOn) {
-    runGame();
-  }
-  else{
-    endGame();
-  }
-  */
 }
 
 // Draws the health bar

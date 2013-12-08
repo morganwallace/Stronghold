@@ -19,5 +19,4 @@ void startGame() {
         mode = 'r';
       }
   }
-  //gameOn = true;
 }
