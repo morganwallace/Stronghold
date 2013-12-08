@@ -12,6 +12,7 @@ import java.util.Date;
 PImage stronghold_bg;
 PImage startscreen;
 PImage pausescreen;
+PImage endscreen;
 PImage explosion;
 String lines[];
 
@@ -85,6 +86,10 @@ void setup() {
   // Load and resize pause screen image
   pausescreen = loadImage("../../Assets/pausescreen.png");
   pausescreen.resize(round(pausescreen.width*screen_scale),round(pausescreen.height*screen_scale));
+
+  // Load and resize end screen image
+  endscreen = loadImage("../../Assets/endscreen.png");
+  endscreen.resize(round(endscreen.width*screen_scale),round(endscreen.height*screen_scale));
 
   // Load and resize explosion image
   explosion = loadImage("../../Assets/explosion.png");
