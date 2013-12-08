@@ -10,6 +10,9 @@
 import java.util.Date;
 
 PImage stronghold_bg;
+PImage startscreen;
+PImage pausescreen;
+PImage endscreen;
 PImage explosion;
 String lines[];
 
@@ -34,6 +37,7 @@ ArrayList<Arrow> arrows;
 int arrownumber = 1;
 ArrayList<RepairBubble> repairbubbles;
 int repairnumber = 1;
+Sync sync1, sync2;
 
 // Screen setup
 float screen_scale = 1.5;      // Scaling factor when drawing the screen
@@ -50,10 +54,17 @@ float gamespeed = 1.5;
 float walkingspeed = 0.2; 
 int skeleton_number = 8;
 
+// Game mode variable switches between "start", "run", "pause" and "end" screen
+char mode = 's';
+
 // Positioning of monsters
 int y_start_position;
 int y_start_upper = round(80*screen_scale);
 int y_start_lower = round(screenheight - 20*character_scale);
+
+// Variables to avoid repeat triggering of key events
+long lastPause = 0;
+long waitPause = 500;
 
 // Game setup, runs once on launch
 void setup() {
@@ -68,6 +79,18 @@ void setup() {
   // Load and resize background image
   stronghold_bg = loadImage("../../Assets/stronghold_bg.png");
   stronghold_bg.resize(round(stronghold_bg.width*screen_scale),round(stronghold_bg.height*screen_scale));
+  
+  // Load and resize pause screen image
+  startscreen = loadImage("../../Assets/startscreen.png");
+  startscreen.resize(round(startscreen.width*screen_scale),round(startscreen.height*screen_scale));
+
+  // Load and resize pause screen image
+  pausescreen = loadImage("../../Assets/pausescreen.png");
+  pausescreen.resize(round(pausescreen.width*screen_scale),round(pausescreen.height*screen_scale));
+
+  // Load and resize end screen image
+  endscreen = loadImage("../../Assets/endscreen.png");
+  endscreen.resize(round(endscreen.width*screen_scale),round(endscreen.height*screen_scale));
 
   // Load and resize explosion image
   explosion = loadImage("../../Assets/explosion.png");
@@ -76,6 +99,10 @@ void setup() {
   // Initialize two knights with variable coordinates
   knight1 = new Knight(width/6, height/8);
   knight2 = new Knight(width/6, height/3);
+  
+  // Initialize syncs with variable coordinates and frequency
+  sync1 = new Sync(width/6, height/7, 2);
+  sync2 = new Sync(width/6, height/2.7, 2); 
   
   // Create array of skeletons
   skeletons = new Skeleton[skeleton_number];
@@ -94,108 +121,30 @@ void setup() {
   repairbubbles = new ArrayList<RepairBubble>(); 
 }
 
-// Main game logic, looped as long as game runs
+// Draw screens (game itself as well as start and end screen)
 void draw() {
+  switch(mode) {
+    case 's': //start
+      startGame();
+      break;
+    case 'r':  //run
+      runGame();
+      break;
+    case 'p': //pause
+      pauseGame();
+      break;
+    case 'e': //end
+      endGame();
+      break;
+  }
+  /*
   if(gameOn) {
-    image(stronghold_bg, 0, 0);
-    
-    drawHealthBar(10, 10, castlehealth);
-  
-    knight1.display(); 
-    knight2.display();
-       
-    for (int i = 0; i < skeletons.length; i++) {
-      skeletons[i].display();
-      skeletons[i].move();
-    }
-    
-    for (int i = arrows.size()-1; i >= 0; i--) {
-      Arrow arrow = arrows.get(i);
-      arrow.display();
-      arrow.move();
-      
-      if(arrow.finished()) {
-        arrows.remove(i);
-      } 
-    }
-    
-    for (int i = repairbubbles.size()-1; i >= 0; i--) {
-      RepairBubble repairbubble = repairbubbles.get(i);
-      repairbubble.display();
-      repairbubble.move();
-      
-      if(repairbubble.finished()) {
-        repairbubbles.remove(i);
-      } 
-    }
-        
-        
-    // ##### DUMBBELL INPUT #####
-    
-    //Load rep data from file
-    lines = loadStrings("player1shoot.txt");
-    reps_1s=Integer.parseInt(lines[0]);
-    if (reps_1s>previous_reps_1s){
-      knight1.shoot(1);
-      previous_reps_1s=reps_1s;
-      println(reps_1s);
-    }
-    
-    lines = loadStrings("player2shoot.txt");
-    reps_2s=Integer.parseInt(lines[0]);
-    if (reps_2s>previous_reps_2s){
-      knight2.shoot(2);
-      previous_reps_2s=reps_2s;
-      println(reps_2s);
-    }
-    
-    lines = loadStrings("player1repair.txt");
-    reps_1r=Integer.parseInt(lines[0]);
-    if (reps_1r>previous_reps_1r){
-      knight1.repair();
-      previous_reps_1r=reps_1r;
-      println(reps_1r);
-    }
-    
-    lines = loadStrings("player2repair.txt");
-    reps_2r=Integer.parseInt(lines[0]);
-    if (reps_2r>previous_reps_2r){
-      knight2.repair();
-      previous_reps_2r=reps_2r;
-      println(reps_2r);
-    }
-    
-    
-    
-    // ##### KEYBOARD INPUT #####
-    
-    if(keyPressed) {
-      // Shoot arrow from player 1 if key 'A' is pressed
-      if (key == 'a' || key == 'A') {
-        knight1.shoot(1);
-      }
-      
-      // Shoot arrow from player 2 if key 'B' is pressed
-      if (key == 'l' || key == 'L') {
-        knight2.shoot(2);
-      }
-      
-      // Castle repair from player 1 if key 'Q' is pressed
-      if (key == 'q' || key == 'Q') {
-        knight1.repair();
-      }
-      
-      // Castle repair from player 2 if key 'O' is pressed
-      if (key == 'o' || key == 'O') {
-        knight2.repair();
-      }
-      
-    }
-  
+    runGame();
   }
   else{
-    gameOver();
+    endGame();
   }
+  */
 }
 
 // Draws the health bar
@@ -203,15 +152,4 @@ void drawHealthBar (int posx, int posy, float health) {
   fill(0,230,0,200);
   noStroke();
   rect(posx, posy, posx+health, posy+10);
-}
-
-// Called when game is over
-void gameOver() {
-  // Draw background
-  image(stronghold_bg, 0, 0);
-
-  // Draw transparent black box over it
-  fill(0, 0, 0, 200);
-  noStroke();
-  rect(0, 0, width, height);
 }
