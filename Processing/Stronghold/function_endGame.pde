@@ -10,4 +10,16 @@ void endGame() {
   
   // Add pause screen image over it
   image(endscreen, 0, 0);
+  
+  // Unpause game if waited long enough
+  if(keyPressed) {
+    Date d = new Date();
+    long currentTime = d.getTime();
+    if(currentTime > lastPause + waitPause) {
+      lastPause = currentTime;
+      if (key == ' ') {
+        reset();
+      }
+    }
+  }
 }
