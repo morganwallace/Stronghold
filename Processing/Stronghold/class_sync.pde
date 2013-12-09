@@ -36,7 +36,6 @@ Sync( float xpos_my, float ypos_my, float freq_my, Knight knight_my){
 void display(){
     float ang = radians(angle);
 //Calculate the current positon of the object
-    println(castleOffset);
     y = ypos - castleOffset + (50 * cos(ang));
 //Load the image at the positio calculated 
     image(image, xpos, y+displayOffset);   

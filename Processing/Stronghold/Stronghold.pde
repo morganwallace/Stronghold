@@ -38,6 +38,8 @@ ArrayList<Arrow> arrows;
 int arrownumber = 1;
 ArrayList<RepairBubble> repairbubbles;
 int repairnumber = 1;
+ArrayList<Explosion> explosions;
+int explosionnumber = 1;
 Sync sync1, sync2;
 
 // Screen setup
@@ -124,6 +126,9 @@ void setup() {
  
  // Create array list (= array of variable length) of repair bubble
   repairbubbles = new ArrayList<RepairBubble>(); 
+  
+ // Create array list (= array of variable length) of explosions
+  explosions = new ArrayList<Explosion>(); 
   
   reset();
 }
