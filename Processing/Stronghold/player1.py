@@ -110,7 +110,7 @@ def calc_reps(d):
             # defined by latest datum not being max or min and
             # if the up or down motion caused at least .4 g
             if (peak-dip>.6) and (dip< values[-1] < peak):
-                print axis
+                #print axis
                 exercise = axis
 
                 #direction of slope can tell you what to expect
@@ -126,16 +126,19 @@ def calc_reps(d):
                 #wait and look for return to starting point
                 while time.time()-halftime<=max_rep_window/2:
                     data.append(get_data_from_serial(ser))
-                    print data[-1][axis]
                     if curve == "valley":
                         if data[-1][axis] >=peak-.2:
 
                             # rep_event(get_times(root1,root2,root3))
                             rep_event(exercise)
+                            peak=0
+                            dip=0
                             break
                     elif curve == "hill":
                         if data[-1][axis] <=dip+.2:
                             rep_event(exercise)
+                            peak=0
+                            dip=0
                             break
 
 

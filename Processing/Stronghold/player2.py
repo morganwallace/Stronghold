@@ -130,11 +130,15 @@ def calc_reps(d):
                         if data[-1][axis] >=peak-.2:
 
                             # rep_event(get_times(root1,root2,root3))
-                            rep_event(exercise,(halftime,time.time()))
+                            rep_event(exercise)
+                            peak=0
+                            dip=0
                             break
                     elif curve == "hill":
                         if data[-1][axis] <=dip+.2:
-                            rep_event(exercise,(halftime,time.time()))
+                            rep_event(exercise,(halftime)
+                            peak=0
+                            dip=0
                             break
 
 
