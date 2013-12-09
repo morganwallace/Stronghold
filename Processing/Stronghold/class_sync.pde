@@ -23,9 +23,12 @@ boolean peak;    //Detecting if the object is at the peak of the cycle
 boolean top_reached; 
 boolean bottom_reached;
 
-Sync( float xpos_my, float ypos_my, float freq_my){
-  ypos = ypos_my;
-  xpos = xpos_my;
+Knight knight;  // To adjust position to knight
+
+Sync( float xpos_my, float ypos_my, float freq_my, Knight knight_my){
+  knight = knight_my;
+  xpos = knight.xpos - width*0.01;
+  ypos = knight.ypos + height*0.04;
   freq = freq_my;
   load_image("blue");    
 }
@@ -33,7 +36,8 @@ Sync( float xpos_my, float ypos_my, float freq_my){
 void display(){
     float ang = radians(angle);
 //Calculate the current positon of the object
-    y = ypos + (50 * cos(ang));
+    println(castleOffset);
+    y = ypos - castleOffset + (50 * cos(ang));
 //Load the image at the positio calculated 
     image(image, xpos, y+displayOffset);   
 //Check if the object is in the peak range currently range set to +-40 
@@ -50,8 +54,8 @@ void display(){
 // Display end points
   stroke(0, 0, 0);
   strokeWeight(3);
-  line(xpos, ypos-23-image.height, xpos+image.width, ypos-23-image.height); // upper end point
-  line(xpos, ypos+32+image.height, xpos+image.width, ypos+32+image.height); // lower end point
+  line(xpos, ypos-23-image.height-castleOffset, xpos+image.width, ypos-23-image.height-castleOffset); // upper end point
+  line(xpos, ypos+32+image.height-castleOffset, xpos+image.width, ypos+32+image.height-castleOffset); // lower end point
     
 }
 
@@ -66,10 +70,10 @@ void load_image(String colour){
  String path;
  
  //Query current Y-position to set top or bottom reached and change direction
-  if (y == ypos + 50){
+  if (y == ypos - castleOffset + 50){
      top_reached = true;
      bottom_reached = false;
-   } else if (y == ypos - 50){
+   } else if (y == ypos - castleOffset - 50){
      top_reached = false;
      bottom_reached = true;
    }

@@ -106,8 +106,8 @@ void setup() {
   knight2 = new Knight(width/6, height/3+castleOffset*3);
   
   // Initialize syncs with variable coordinates and frequency
-  sync1 = new Sync(width/6, height/7, 2);
-  sync2 = new Sync(width/6, height/2.7, 2); 
+  sync1 = new Sync(width/6, height/7, 2, knight1);
+  sync2 = new Sync(width/6, height/2.7, 2, knight2); 
   
   // Create array of skeletons
   skeletons = new Skeleton[skeleton_number];
