@@ -1,5 +1,6 @@
 // Called when game is over
 void endGame() {
+  
   // Draw background
   image(stronghold_bg, 0, 0);
   
@@ -15,6 +16,15 @@ void endGame() {
   // Add pause screen image over it
   image(endscreen, 0, 0);
   
+  //Add some delay
+  
+  //Add data gathering (i.e. team name, player name)
+
+  //Record and display scores
+  if (call_count == 0){
+  high_score = new high_score(global_score, "temp_team", "temp_p1", "temp_p2");
+  high_score.save_score();
+  }
   // Delete all explosions
   for (int i = explosions.size()-1; i >= 0; i--) {
     Explosion explosion = explosions.get(i);

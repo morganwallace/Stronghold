@@ -65,6 +65,8 @@ class Arrow {
     else {
       target.getHit(origin.damage);
       finished = true;
+      //keeping score
+      global_score = global_score + 1;
     }
   }
   

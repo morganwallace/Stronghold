@@ -57,7 +57,7 @@ void display(){
 //Load the image at the positio calculated 
     image(image, xpos, y+displayOffset);   
 //Check if the object is in the peak range currently range set to +-40 
-    if (y <= ypos - 40){
+    if (y <= ypos - 40 - castleOffset){
       peak = true;     
     } else {
       peak = false;

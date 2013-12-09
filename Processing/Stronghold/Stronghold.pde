@@ -42,6 +42,7 @@ int repairnumber = 1;
 ArrayList<Explosion> explosions;
 int explosionnumber = 1;
 Sync sync1, sync2;
+high_score high_score;
 
 // Screen setup
 float screen_scale = 1.5;      // Scaling factor when drawing the screen
@@ -71,6 +72,10 @@ int y_start_lower = round(screenheight - 20*character_scale);
 // Variables to avoid repeat triggering of key events
 long lastPause = 0;
 long waitPause = 500;
+
+// Score keeping variables
+int global_score = 0;
+int call_count = 0; 
 
 // Game setup, runs once on launch
 void setup() {
