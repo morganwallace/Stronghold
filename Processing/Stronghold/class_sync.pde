@@ -60,7 +60,7 @@ void display(){
     if (y <= ypos - 40 - castleOffset){
       peak = true;     
     } else {
-      peak = false;
+      peak = true;
     }
 //Reset the image  
     load_image("blue");
