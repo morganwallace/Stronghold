@@ -37,11 +37,20 @@ Sync( float xpos_my, float ypos_my, float freq_my, Knight knight_my){
   bg = loadImage("../../Assets/syncbar.png");
   
   // scale images by character_scale factor
-  bg.resize(round(bg.width*character_scale),round(bg.height*character_scale));
+  bg.resize(round(bg.width*character_scale/4),round(bg.height*character_scale/4));
   
 }
 
 void display(){
+    
+    // Display background bar
+    stroke(0, 0, 0);
+    strokeWeight(3);
+    line(xpos, ypos-23-image.height-castleOffset, xpos+image.width, ypos-23-image.height-castleOffset); // upper end point
+    line(xpos, ypos+32+image.height-castleOffset, xpos+image.width, ypos+32+image.height-castleOffset); // lower end point
+    image(bg, xpos-7, ypos-castleOffset-64);
+      
+
     float ang = radians(angle);
 //Calculate the current positon of the object
     y = ypos - castleOffset + (50 * cos(ang));
@@ -57,12 +66,6 @@ void display(){
     load_image("blue");
 //Increment the angle by freq
     angle += freq;
-    
-// Display end points
-  stroke(0, 0, 0);
-  strokeWeight(3);
-  line(xpos, ypos-23-image.height-castleOffset, xpos+image.width, ypos-23-image.height-castleOffset); // upper end point
-  line(xpos, ypos+32+image.height-castleOffset, xpos+image.width, ypos+32+image.height-castleOffset); // lower end point
     
 }
 

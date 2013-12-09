@@ -11,6 +11,7 @@ import java.util.Date;
 
 PImage stronghold_bg;
 PImage castle_bg;
+PImage healthbar;
 PImage startscreen;
 PImage pausescreen;
 PImage endscreen;
@@ -83,9 +84,13 @@ void setup() {
   stronghold_bg = loadImage("../../Assets/stronghold_bg.png");
   stronghold_bg.resize(round(stronghold_bg.width*screen_scale),round(stronghold_bg.height*screen_scale));
   
-  // Load and resize castke image
+  // Load and resize castle image
   castle_bg = loadImage("../../Assets/castle.png");
   castle_bg.resize(round(castle_bg.width*screen_scale),round(castle_bg.height*screen_scale));
+  
+  // Load and resize healthbar image
+  healthbar = loadImage("../../Assets/healthbar.png");
+  healthbar.resize(round(healthbar.width*screen_scale),round(healthbar.height*screen_scale));
   
   // Load and resize pause screen image
   startscreen = loadImage("../../Assets/startscreen.png");
@@ -153,7 +158,12 @@ void draw() {
 
 // Draws the health bar
 void drawHealthBar (int posx, int posy, float health) {
-  fill(0,230,0,200);
+  if(castlehealth > castlehealthinit * 0.4) {
+    fill(0,230,0,200);
+  } else {
+    fill(190,0,0,200);
+  }
   noStroke();
   rect(posx, posy, posx+health, posy+10);
+  image(healthbar, 0, 0); // Draw healthbar image
 }
