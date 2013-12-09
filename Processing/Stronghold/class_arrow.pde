@@ -30,7 +30,7 @@ class Arrow {
     target = target_my;
     
     float startx = origin.xpos + origin.image.width;
-    float starty = origin.ypos + origin.image.height/2;
+    float starty = origin.ypos + origin.image.height/2 - castleOffset;
     float endx = target.xpos;
     float endy = target.ypos + target.image_m.height/2;
     
