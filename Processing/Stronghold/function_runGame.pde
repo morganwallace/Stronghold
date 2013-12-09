@@ -39,6 +39,15 @@ void runGame() {
       repairbubbles.remove(i);
     } 
   }
+  
+  for (int i = explosions.size()-1; i >= 0; i--) {
+    Explosion explosion = explosions.get(i);
+    explosion.display();
+    
+    if(explosion.finished()) {
+      explosions.remove(i);
+    } 
+  }
       
       
   // ##### DUMBBELL INPUT #####
@@ -55,7 +64,7 @@ void runGame() {
         sync1.load_image("red");
       }
     previous_reps_1s=reps_1s;
-    println(reps_1s);
+    //println(reps_1s);
   }
   
   lines = loadStrings("player2shoot.txt");
@@ -69,7 +78,7 @@ void runGame() {
         sync2.load_image("red");
       }
     previous_reps_2s=reps_2s;
-    println(reps_2s);
+    //println(reps_2s);
   }
   
   lines = loadStrings("player1repair.txt");
@@ -83,7 +92,7 @@ void runGame() {
         sync1.load_image("red");
       }
     previous_reps_1r=reps_1r;
-    println(reps_1r);
+    //println(reps_1r);
   }
   
   lines = loadStrings("player2repair.txt");
@@ -97,7 +106,7 @@ void runGame() {
         sync2.load_image("red");
       }
     previous_reps_2r=reps_2r;
-    println(reps_2r);
+    //println(reps_2r);
   }
   
   

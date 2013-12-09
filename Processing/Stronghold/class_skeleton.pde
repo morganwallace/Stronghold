@@ -83,7 +83,9 @@ class Skeleton {
   }
   
   void explode() { // Triggers explosion
-    image(explosion, xpos-explosion.width/2, ypos-explosion.width/2);
+    //image(explosion, xpos-explosion.width/2, ypos-explosion.width/2);
+    explosions.add(new Explosion(this, explosionnumber));
+    explosionnumber++;
   }
   
   void getHit(float damage) {
