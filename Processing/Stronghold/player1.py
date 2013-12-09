@@ -28,11 +28,11 @@ player=1
 ser = serial.Serial('/dev/tty.usbmodem1421', 9600)
 
 #output files reset to 0
-with open("player"+str(player)+"repair.txt" ,'r+') as out_file:
-    out_file.seek(0)
+with open("player"+str(player)+"repair.txt" ,'w+') as out_file:
+    # out_file.seek(0)
     out_file.write("0")
-with open("player"+str(player)+"shoot.txt" ,'r+') as out_file:
-    out_file.seek(0)
+with open("player"+str(player)+"shoot.txt" ,'w+') as out_file:
+    # out_file.seek(0)
     out_file.write("0")
 
 def timer():
@@ -63,7 +63,7 @@ def rep_event(exer, root_times=(0,0),player=1):
     del data[:-1]
 
     #record reps by player and also by event
-    if exer!=3:
+    if exer==3:
         
         with open("player"+str(player)+"shoot.txt" ,'r+') as out_file:
             file_reps=int(out_file.read())+1
@@ -71,7 +71,7 @@ def rep_event(exer, root_times=(0,0),player=1):
             out_file.seek(0)
             out_file.write(str(file_reps))
 
-    elif exer ==3:
+    elif exer !=3:
         with open("player"+str(player)+"repair.txt" ,'r+') as out_file:
             file_reps=int(out_file.read())+1
             print "Player"+str(player)+" repair:" + "reps: "+str(file_reps)
@@ -111,7 +111,7 @@ def calc_reps(d):
             # defined by latest datum not being max or min and
             # if the up or down motion caused at least .4 g
             if (peak-dip>.6) and (dip< values[-1] < peak):
-                # print axis
+                print axis
                 exercise = axis
 
                 #direction of slope can tell you what to expect
@@ -128,13 +128,13 @@ def calc_reps(d):
                 while time.time()-halftime<=max_rep_window/2:
                     data.append(get_data_from_serial(ser))
                     if curve == "valley":
-                        if data[-1][axis] >=peak-.2:
+                        if data[-1][axis] >=peak-.3:
 
                             # rep_event(get_times(root1,root2,root3))
                             rep_event(exercise,(halftime,time.time()))
                             break
                     elif curve == "hill":
-                        if data[-1][axis] <=dip+.2:
+                        if data[-1][axis] <=dip+.3:
                             rep_event(exercise,(halftime,time.time()))
                             break
 
