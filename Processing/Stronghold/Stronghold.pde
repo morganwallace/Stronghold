@@ -10,6 +10,7 @@
 import java.util.Date;
 
 PImage stronghold_bg;
+PImage castle_bg;
 PImage startscreen;
 PImage pausescreen;
 PImage endscreen;
@@ -49,7 +50,9 @@ int screenheight = round(480*screen_scale);
 float castleborder = screenwidth*0.2;  // X coordinate of the wall of the castle
 float castlehealthinit = 100;        // Initial health of the castle
 float castlehealth;
-float castlehealthMax = 200;     // Maximum health of the castle
+float castlehealthMax = 200;         // Maximum health of the castle
+float castleOffsetMultiplier = 0.5;  // To calculate the offset from the castle health
+float castleOffset = castlehealthinit * castleOffsetMultiplier;  // Offset of castle due to health
 float gamespeed = 1.5;
 float walkingspeed = 0.2; 
 int skeleton_number = 8;
@@ -78,6 +81,10 @@ void setup() {
   stronghold_bg = loadImage("../../Assets/stronghold_bg.png");
   stronghold_bg.resize(round(stronghold_bg.width*screen_scale),round(stronghold_bg.height*screen_scale));
   
+  // Load and resize castke image
+  castle_bg = loadImage("../../Assets/castle.png");
+  castle_bg.resize(round(castle_bg.width*screen_scale),round(castle_bg.height*screen_scale));
+  
   // Load and resize pause screen image
   startscreen = loadImage("../../Assets/startscreen.png");
   startscreen.resize(round(startscreen.width*screen_scale),round(startscreen.height*screen_scale));
@@ -95,8 +102,8 @@ void setup() {
   explosion.resize(round(explosion.width*character_scale),round(explosion.height*character_scale));
   
   // Initialize two knights with variable coordinates
-  knight1 = new Knight(width/6, height/8);
-  knight2 = new Knight(width/6, height/3);
+  knight1 = new Knight(width/6, height/8+castleOffset*3);
+  knight2 = new Knight(width/6, height/3+castleOffset*3);
   
   // Initialize syncs with variable coordinates and frequency
   sync1 = new Sync(width/6, height/7, 2);

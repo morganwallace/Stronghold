@@ -10,6 +10,7 @@ class Skeleton {
   float healthInit;     // Initial health of the monster
   float footpos = 0;    // Foot position
   int index;            // Index of the monster
+  float damagecastle = 10;    // Damage that skeleton does when reaching the castle
   
   
   Skeleton(float xpos_my, float ypos_my, float xspeed_my, int index_my) {
@@ -49,8 +50,8 @@ class Skeleton {
   void move() {
     // When dead, explode and reset
     if(health <= 0) {
-      this.explode();
-      this.reset();
+      explode();
+      reset();
     }
     
     // Move
@@ -68,7 +69,7 @@ class Skeleton {
     if(xpos <= castleborder) {
      this.explode();
      this.reset();
-     castlehealth -= 10;
+     castlehealth -= damagecastle;
 
      if(castlehealth <= 0) {
        mode = 'e';
