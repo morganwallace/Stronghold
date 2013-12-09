@@ -119,23 +119,30 @@ void save_score() {
 
 void display_score(){
  Table display_table;
- int display_count = 50;
- PFont f = createFont("Arial", 16, true); 
+ //Vertical offset
+ float vertical_offset = height/2.5;
+ //Font
+ PFont f = createFont("Garamond", 30, true); 
+ //spacing
+ String space = "      ";
+ String first_space = space;
+ String space_one_less = "    "; 
  
   display_table = loadTable("high scores.csv", "header");
   
   // Drawing properties
-  // background(255);
-  // stroke(175);
   textFont(f);       
-  fill(0);
-  textAlign(CENTER);
+  fill(255, 255, 255);
+  textAlign(LEFT);
   
   for (TableRow display_row : display_table.rows()){
-   String print_row = display_row.getInt("Rank")+" "+display_row.getString("Team name")+" "+display_row.getString("Player1")+" "+display_row.getString("Player2")+" "+display_row.getInt("Score");  
-   text(print_row, width/2, display_count);
-   display_count = display_count + 22;
-   println(print_row); 
+   if (display_row.getInt("Rank") >= 10) {
+     first_space = space_one_less;
    }
+   String print_row = display_row.getInt("Rank")+first_space+display_row.getString("Team name")+space+display_row.getString("Player1")+space+display_row.getString("Player2")+space+display_row.getInt("Score");  
+   text(print_row, width/6, vertical_offset);
+   vertical_offset = vertical_offset + 40;
+   println(print_row); 
+  }
 }
 }

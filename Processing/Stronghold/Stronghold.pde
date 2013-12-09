@@ -57,7 +57,7 @@ float castlehealth;
 float castlehealthMax = 200;         // Maximum health of the castle
 float castleOffsetMultiplier = 0.5;  // To calculate the offset from the castle health
 float castleOffset = castlehealthinit * castleOffsetMultiplier;  // Offset of castle due to health
-float gamespeed = 1.5;
+float gamespeed = 6.5;
 float walkingspeed = 0.2; 
 int skeleton_number = 8;
 
@@ -75,6 +75,9 @@ long waitPause = 500;
 
 // Score keeping variables
 int global_score = 0;
+String global_team = "Team Stronghold";
+String global_p1 = "Suhaib";
+String global_p2 = "Morgan";
 int call_count = 0; 
 
 // Game setup, runs once on launch

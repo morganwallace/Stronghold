@@ -22,8 +22,10 @@ void endGame() {
 
   //Record and display scores
   if (call_count == 0){
-  high_score = new high_score(global_score, "temp_team", "temp_p1", "temp_p2");
+  high_score = new high_score(global_score, global_team, global_p1, global_p2);
   high_score.save_score();
+  } else if (call_count >= 1){
+  high_score.display_score();
   }
   // Delete all explosions
   for (int i = explosions.size()-1; i >= 0; i--) {
