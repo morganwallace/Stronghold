@@ -13,7 +13,6 @@ so that Processing can read it in real-time
 #################################################
 '''
 data=[]
-data2=[]
 slopes=[]
 start_time=time.time()
 ######  Preferences Variables  ######
@@ -60,7 +59,7 @@ def get_slope(axis,datalist, samples=2):
 
 def rep_event(exer, root_times=(0,0),player=2):
     global data
-    del data[:-1]
+    del data[:-2]
 
     #record reps by player and also by event
     if exer==1:
@@ -83,7 +82,7 @@ def rep_event(exer, root_times=(0,0),player=2):
 	# ser.write("reps:"+str(reps))
 	# print 'test'
 	# test=ser.readline()
-	# print test 
+	# print test
 
 
 def calc_reps(d):
@@ -128,13 +127,13 @@ def calc_reps(d):
                 while time.time()-halftime<=max_rep_window/2:
                     data.append(get_data_from_serial(ser))
                     if curve == "valley":
-                        if data[-1][axis] >=peak-.3:
+                        if data[-1][axis] >=peak-.2:
 
                             # rep_event(get_times(root1,root2,root3))
                             rep_event(exercise,(halftime,time.time()))
                             break
                     elif curve == "hill":
-                        if data[-1][axis] <=dip+.3:
+                        if data[-1][axis] <=dip+.2:
                             rep_event(exercise,(halftime,time.time()))
                             break
 
