@@ -16,16 +16,18 @@ float xpos;      //Initial X-Position
 float y;         //Current position 
 float freq;      //Frequency of the cycle
 float angle = 0; //Cosine angle initialization 
+float displayOffset;    //Offsets the image file to align the 'core' of the indicators when switching from up to down
+float imageHeight;      //Needed to calculate the displayOffset
 
 boolean peak;    //Detecting if the object is at the peak of the cycle
 boolean top_reached; 
 boolean bottom_reached;
 
 Sync( float xpos_my, float ypos_my, float freq_my){
- ypos = ypos_my;
- xpos = xpos_my;
- freq = freq_my;
- load_image("blue");    
+  ypos = ypos_my;
+  xpos = xpos_my;
+  freq = freq_my;
+  load_image("blue");    
 }
 
 void display(){
@@ -33,7 +35,7 @@ void display(){
 //Calculate the current positon of the object
     y = ypos + (50 * cos(ang));
 //Load the image at the positio calculated 
-    image(image, xpos , y);   
+    image(image, xpos, y+displayOffset);   
 //Check if the object is in the peak range currently range set to +-40 
     if (y <= ypos - 40){
       peak = true;     
@@ -44,6 +46,13 @@ void display(){
     load_image("blue");
 //Increment the angle by freq
     angle += freq;
+    
+// Display end points
+  stroke(0, 0, 0);
+  strokeWeight(3);
+  line(xpos, ypos-23-image.height, xpos+image.width, ypos-23-image.height); // upper end point
+  line(xpos, ypos+32+image.height, xpos+image.width, ypos+32+image.height); // lower end point
+    
 }
 
 boolean peak(){
@@ -67,9 +76,12 @@ void load_image(String colour){
    
  //change directions
  if (top_reached){
- direction = "up";
+   direction = "up";
+   displayOffset = 0;
  } else {
- direction = "down";}
+   direction = "down";
+   displayOffset = -19;
+ }
  
  //set image path
  path = "../../Assets/progress_"+colour+"_"+direction+".png";
@@ -77,5 +89,8 @@ void load_image(String colour){
  image = loadImage(path);
  // scale images by screen_scale factor
  image.resize(round(image.width*screen_scale),round(image.height*screen_scale));
+
+ 
 }
+
 }
