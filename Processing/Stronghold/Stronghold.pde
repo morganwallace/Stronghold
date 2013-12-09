@@ -109,8 +109,8 @@ void setup() {
   explosion.resize(round(explosion.width*character_scale),round(explosion.height*character_scale));
   
   // Initialize two knights with variable coordinates
-  knight1 = new Knight(width/6, height/8+castleOffset*3);
-  knight2 = new Knight(width/6, height/3+castleOffset*3);
+  knight1 = new Knight(width/6, height/8+castleOffset*3, 1);
+  knight2 = new Knight(width/6, height/3+castleOffset*3, 2);
   
   // Initialize syncs with variable coordinates and frequency
   sync1 = new Sync(width/6, height/7, 2, knight1);

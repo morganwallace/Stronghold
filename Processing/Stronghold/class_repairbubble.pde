@@ -25,7 +25,7 @@ class RepairBubble {
     origin = origin_my;
     
     float startx = origin.xpos;
-    float starty = origin.ypos + origin.image.height;
+    float starty = origin.ypos + origin.image1.height;
     float endx = startx;
     float endy = 10;
     

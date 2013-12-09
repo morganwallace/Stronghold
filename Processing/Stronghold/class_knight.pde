@@ -1,9 +1,11 @@
 class Knight {
-  PImage image;
+  PImage image1;
+  PImage image2;
   float xpos;
   float ypos;
   float damage = 10;   // Damage from each shot
   float repaired = 5;
+  int type;            // Defines the image of the knight
   
   // Time-related variables
   long current;
@@ -12,17 +14,25 @@ class Knight {
   long waitShoot = 500;     // Time between shots
   long waitRepair = 500;     // Time between repairs
 
-  Knight(float xpos_my, float ypos_my) {
+  Knight(float xpos_my, float ypos_my, int type_my) {
     // Load and resize knight image (scaling divided by 2, as original image is larger)
-    image = loadImage("../../Assets/knight.png");
-    image.resize(round(image.width*character_scale/2),round(image.height*character_scale/2));
+    image1 = loadImage("../../Assets/knight1.png");
+    image1.resize(round(image1.width*character_scale/2),round(image1.height*character_scale/2));
+    image2 = loadImage("../../Assets/knight2.png");
+    image2.resize(round(image2.width*character_scale/2),round(image2.height*character_scale/2));
 
     xpos = xpos_my;
-    ypos = ypos_my;  
+    ypos = ypos_my;
+    type = type_my;  
   }
   
   void display() {
-    image(image, xpos, ypos-castleOffset);
+    if(type == 1) {
+      image(image1, xpos, ypos-castleOffset);
+    }
+    if(type == 2) {
+      image(image2, xpos, ypos-castleOffset);
+    }
   }
   
   // Function to shoot an enemy with an arrow
