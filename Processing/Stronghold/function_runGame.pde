@@ -1,7 +1,12 @@
 // #### Main game logic, looped as long as game runs
 
 void runGame() { 
+  // Display background
   image(stronghold_bg, 0, 0);
+  
+  // Display castle
+  castleOffset = castlehealth*castleOffsetMultiplier;
+  image(castle_bg, 0, 100 - castleOffset);
   
   drawHealthBar(10, 10, castlehealth);
 

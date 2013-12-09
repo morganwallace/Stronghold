@@ -22,7 +22,7 @@ class Knight {
   }
   
   void display() {
-    image(image, xpos, ypos);
+    image(image, xpos, ypos-castleOffset);
   }
   
   // Function to shoot an enemy with an arrow

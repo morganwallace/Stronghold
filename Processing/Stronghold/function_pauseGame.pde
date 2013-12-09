@@ -4,6 +4,10 @@ void pauseGame() {
   
   // Draw background
   image(stronghold_bg, 0, 0);
+  
+  // Display castle
+  castleOffset = castlehealth*castleOffsetMultiplier;
+  image(castle_bg, 0, 100 - castleOffset);
 
   // Draw transparent black box over it
   fill(0, 0, 0, 200);
