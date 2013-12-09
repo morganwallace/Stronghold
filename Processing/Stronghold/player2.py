@@ -128,7 +128,7 @@ def calc_reps(d):
                 while time.time()-halftime<=max_rep_window/2:
                     data.append(get_data_from_serial(ser))
                     if curve == "valley":
-                        if data[-1][axis] >=peak-.1:
+                        if data[-1][axis] >=peak-.3:
 
                             # rep_event(get_times(root1,root2,root3))
                             rep_event(exercise,(halftime,time.time()))
