@@ -2,6 +2,7 @@ from __future__ import division
 import serial
 import time
 import os
+import pickle
 '''
 #################################################
 
@@ -23,8 +24,14 @@ initialize_time=1 #second
 
 player=1
 
+#Attempt serial connection
+try:
+    ser = serial.Serial('/dev/tty.usbmodem1421', 9600)
 
-ser = serial.Serial('/dev/tty.usbmodem1421', 9600)
+#Failed serial connections used old test data
+except:
+    print "no serial activity; reverting to test data"
+    ser=pickle.load(open("curls_test2.p","rb"))
 
 #output files reset to 0
 with open("player"+str(player)+"repair.txt" ,'w+') as out_file:
@@ -38,9 +45,18 @@ def timer():
 	global start_time
 	return time.time()
 
-def get_data_from_serial(serial):
-    serialOutput=serial.readline()
-    # print serialOutput
+def get_data_from_serial():
+    global ser
+    try:
+        serialOutput=ser.readline()
+    except:#in case you don't have usb and are going off of old data
+        time.sleep(.2)
+        try:serialOutput=ser[0]
+        except:quit()
+        del ser[0]
+        return serialOutput
+    # quit()
+    print serialOutput
     serialTuple=serialOutput.split(",")
     if len(serialTuple)!=3:
         return None
@@ -77,15 +93,9 @@ def rep_event(exer, root_times=(0,0),player=1):
             out_file.seek(0)
             out_file.write(str(file_reps))
 
-	# serial_out_data="%f,%f,%f\n"%(root_times)
-	# print 'test1'
-	# ser.write("reps:"+str(reps))
-	# print 'test'
-	# test=ser.readline()
-	# print test 
 
 
-def calc_reps(d):
+def detect_rep():
 
     #only look for reps after the min rep window
     min_samples=int(min_rep_window/sampleRate)
@@ -125,11 +135,9 @@ def calc_reps(d):
 
                 #wait and look for return to starting point
                 while time.time()-halftime<=max_rep_window/2:
-                    data.append(get_data_from_serial(ser))
+                    data.append(get_data_from_serial())
                     if curve == "valley":
                         if data[-1][axis] >=peak-.2:
-
-                            # rep_event(get_times(root1,root2,root3))
                             rep_event(exercise)
                             peak=0
                             dip=0
@@ -154,20 +162,15 @@ def main():
     #loops forever
     while True:
     	#limit time for rep detection to 5 seconds
-        #print "start"
     	if len(data)*sampleRate>=max_rep_window: 
     		del data[0]
     		
     	#Get time, x, y, and z from serial port
-    	data.append(get_data_from_serial(ser))
+    	data.append(get_data_from_serial())
 
         if data:
-            calc_reps(1)
-            # print data[-1]
-        #while time.time()<=data[-1][0]+sampleRate:
-        #    pass
-        #while time.time()<=data2[-1][0]+sampleRate:
-        #    pass
+            detect_rep()
+
 		
 
 if __name__ == '__main__':
