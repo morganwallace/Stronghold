@@ -15,6 +15,12 @@ void endGame() {
   // Add pause screen image over it
   image(endscreen, 0, 0);
   
+  // Delete all explosions
+  for (int i = explosions.size()-1; i >= 0; i--) {
+    Explosion explosion = explosions.get(i);
+    explosions.remove(i);
+  } 
+  
   // Unpause game if waited long enough
   if(keyPressed) {
     Date d = new Date();
