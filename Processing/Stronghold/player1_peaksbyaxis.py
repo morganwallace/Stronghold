@@ -23,11 +23,11 @@ max_rep_window=5 #seconds
 min_rep_window=.4 #seconds
 initialize_time=1 #second
 
-player=2
+player=1
 
 #Attempt serial connection
 try:
-    ser = serial.Serial('/dev/tty.usbmodem1411', 9600)
+    ser = serial.Serial('/dev/tty.usbmodem1421', 9600)
 
 #Failed serial connections used old test data
 except:
