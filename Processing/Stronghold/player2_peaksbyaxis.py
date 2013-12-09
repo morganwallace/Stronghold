@@ -19,7 +19,7 @@ slopes=[]
 start_time=time.time()
 ######  Preferences Variables  ######
 sampleRate=.2 #this is set by the code on Arduino
-max_rep_window=5 #seconds
+max_rep_window=3 #seconds
 min_rep_window=.4 #seconds
 initialize_time=1 #second
 
@@ -78,7 +78,7 @@ def rep_event(exer, root_times=(0,0)):
     del(data[:-1])
 
     #record reps by player and also by event
-    if exer==3:
+    if exer==1:
         
         with open("player"+str(player)+"shoot.txt" ,'r+') as out_file:
             file_reps=int(out_file.read())+1
@@ -86,7 +86,7 @@ def rep_event(exer, root_times=(0,0)):
             out_file.seek(0)
             out_file.write(str(file_reps))
 
-    elif exer !=3:
+    elif exer ==3:
         with open("player"+str(player)+"repair.txt" ,'r+') as out_file:
             file_reps=int(out_file.read())+1
             print "Player"+str(player)+" repair:" + "reps: "+str(file_reps)
@@ -124,7 +124,7 @@ def halfway(axis,peak,dip):
                 peak=0
                 dip=0
                 break
-        time.sleep(.2)
+        # time.sleep(.2)
 
 
 peak_x,peak_y,peak_z,dip_x,dip_y,dip_z=0,0,0,0,0,0
@@ -148,6 +148,7 @@ def detect_rep():
     sample=data[-1]
     if len(data)==2:
         peak_x,peak_y,peak_z,dip_x,dip_y,dip_z,range_x,range_y,range_z=sample[1],sample[2],sample[3],sample[1],sample[2],sample[3],0,0,0
+
     else:
         # print peak_x
         
@@ -181,20 +182,23 @@ def detect_rep():
         # defined by latest datum not being max or min and
         # if the up or down motion caused at least .4 g
         # print
-        if (peak_x-dip_x>.8) and (dip_x< data[-1][1] < peak_x):
+        if (peak_x-dip_x>.4) and (dip_x< data[-1][1] < peak_x):
             axis =1
             halfway(axis,peak_x,dip_x)
-            peak_x,peak_y,peak_z,dip_x,dip_y,dip_z,range_x,range_y,range_z=0,0,0,0,0,0,0,0,0
-        if (peak_y-dip_y>.8) and (dip_y< data[-1][3] < peak_y):
-            # print axis
-            axis = 2
-            halfway(axis, peak_y, dip_y)
-            peak_x,peak_y,peak_z,dip_x,dip_y,dip_z,range_x,range_y,range_z=0,0,0,0,0,0,0,0,0
+            peak_x,peak_y,peak_z,dip_x,dip_y,dip_z,range_x,range_y,range_z=sample[1],sample[2],sample[3],sample[1],sample[2],sample[3],0,0,0
         if (peak_z-dip_z>.8) and (dip_z< data[-1][3] < peak_z):
             #print axis
             axis = 3
             halfway(axis, peak_z, dip_z)
-            peak_x,peak_y,peak_z,dip_x,dip_y,dip_z,range_x,range_y,range_z=0,0,0,0,0,0,0,0,0
+            peak_x,peak_y,peak_z,dip_x,dip_y,dip_z,range_x,range_y,range_z=sample[1],sample[2],sample[3],sample[1],sample[2],sample[3],0,0,0  
+        # if (peak_y-dip_y>.5) and (dip_y< data[-1][3] < peak_y):
+        #     # print axis
+        #     axis = 2
+        #     halfway(axis, peak_y, dip_y)
+        #     peak_x,peak_y,peak_z,dip_x,dip_y,dip_z,range_x,range_y,range_z=0,0,0,0,0,0,0,0,0     
+
+
+
 
             
 
