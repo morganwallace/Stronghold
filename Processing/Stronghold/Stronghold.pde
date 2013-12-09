@@ -46,7 +46,7 @@ int screenwidth = round(640*screen_scale);
 int screenheight = round(480*screen_scale);
 
 // Game setup
-float castleborder = screenwidth*0.3;  // X coordinate of the wall of the castle
+float castleborder = screenwidth*0.2;  // X coordinate of the wall of the castle
 float castlehealthinit = 100;        // Initial health of the castle
 float castlehealth;
 float castlehealthMax = 200;     // Maximum health of the castle
