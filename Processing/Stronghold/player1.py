@@ -59,7 +59,7 @@ def get_slope(axis,datalist, samples=2):
 
 def rep_event(exer, root_times=(0,0),player=1):
     global data
-    del data[:-2]
+    del(data[:-1])
 
     #record reps by player and also by event
     if exer==3:
@@ -126,15 +126,16 @@ def calc_reps(d):
                 #wait and look for return to starting point
                 while time.time()-halftime<=max_rep_window/2:
                     data.append(get_data_from_serial(ser))
+                    print data[-1][axis]
                     if curve == "valley":
                         if data[-1][axis] >=peak-.2:
 
                             # rep_event(get_times(root1,root2,root3))
-                            rep_event(exercise,(halftime,time.time()))
+                            rep_event(exercise)
                             break
                     elif curve == "hill":
                         if data[-1][axis] <=dip+.2:
-                            rep_event(exercise,(halftime,time.time()))
+                            rep_event(exercise)
                             break
 
 
