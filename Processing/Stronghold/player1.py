@@ -28,7 +28,7 @@ player=1
 ser = serial.Serial('/dev/tty.usbmodem1421', 9600)
 
 #output files reset to 0
-with open("player"+str(player)+"repair.txt" ,'w') as out_file:
+with open("player"+str(player)+"repair.txt" ,'r+') as out_file:
     out_file.seek(0)
     out_file.write("0")
 with open("player"+str(player)+"shoot.txt" ,'r+') as out_file:
@@ -60,7 +60,7 @@ def get_slope(axis,datalist, samples=2):
 
 def rep_event(exer, root_times=(0,0),player=1):
     global data
-    del data[:-2]
+    del data[:-1]
 
     #record reps by player and also by event
     if exer!=3:
