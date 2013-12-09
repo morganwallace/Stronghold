@@ -8,6 +8,7 @@
 
 class Sync{
 PImage image;    //Image object 
+PImage bg;  //Background of sync indicator
 String colour;   //To choose a different png based on color
 
 //Position related variables
@@ -31,6 +32,13 @@ Sync( float xpos_my, float ypos_my, float freq_my, Knight knight_my){
   ypos = knight.ypos + height*0.04;
   freq = freq_my;
   load_image("blue");    
+  
+  // load image for indicator background
+  bg = loadImage("../../Assets/syncbar.png");
+  
+  // scale images by character_scale factor
+  bg.resize(round(bg.width*character_scale),round(bg.height*character_scale));
+  
 }
 
 void display(){
