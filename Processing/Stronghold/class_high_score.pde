@@ -44,7 +44,7 @@ void save_score() {
   new_score_table.addColumn("Score");
   
   //loop through the current score table
-  for (int i = 0; i < 11 && i < score_table.getRowCount(); i = i+1){
+  for (int i = 0; i < 9 && i < score_table.getRowCount(); i = i+1){
     //get each row of the current score table
     TableRow old_row = score_table.getRow(i);
   
@@ -119,16 +119,13 @@ void save_score() {
 
 void display_score(){
  Table display_table;
+ float horizontal_offset = width/6;
  //Vertical offset
  float vertical_offset = height/2.5;
  //Font
- PFont f = createFont("Garamond", 30, true); 
- //spacing
- String space = "      ";
- String first_space = space;
- String space_one_less = "    "; 
+ PFont f = createFont("Olde English", 30, true); 
  
-  display_table = loadTable("high scores.csv", "header");
+ display_table = loadTable("high scores.csv", "header");
   
   // Drawing properties
   textFont(f);       
@@ -136,13 +133,14 @@ void display_score(){
   textAlign(LEFT);
   
   for (TableRow display_row : display_table.rows()){
-   if (display_row.getInt("Rank") >= 10) {
-     first_space = space_one_less;
-   }
-   String print_row = display_row.getInt("Rank")+first_space+display_row.getString("Team name")+space+display_row.getString("Player1")+space+display_row.getString("Player2")+space+display_row.getInt("Score");  
-   text(print_row, width/6, vertical_offset);
+   text(display_row.getInt("Rank"), horizontal_offset, vertical_offset);
+   text(display_row.getString("Team name"), horizontal_offset + 50, vertical_offset);
+   text(display_row.getString("Player1"), horizontal_offset + 300, vertical_offset);
+   text(display_row.getString("Player2"), horizontal_offset+ 450, vertical_offset);
+   text(display_row.getInt("Score"), horizontal_offset + 600, vertical_offset);
+   
    vertical_offset = vertical_offset + 40;
-   println(print_row); 
+
   }
 }
 }
