@@ -23,10 +23,10 @@ max_rep_window=5 #seconds
 min_rep_window=.4 #seconds
 initialize_time=1 #second
 
-player=2
+player=1
 serPort='/dev/tty.usbmodem14'+str(player)+'1'
 if player==1:
-    dominant_axis=3
+    dominant_axis=2
 elif player==2:
     dominant_axis=2
 #Attempt serial connection
