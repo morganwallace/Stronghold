@@ -17,6 +17,13 @@ void reset() {
   for (int i = 0; i < skeletons.length; i++) {
     skeletons[i].reset();
   }
+  
+  // Reset highscore
+  input_done = false;
+  call_count = 0;
+  global_typing = "";
+  global_label = "Team Name: ";
+  global_label2 = 'T';
     
   // Set game into 'start' mode / show 'start' screen
   mode = 's';
