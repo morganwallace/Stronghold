@@ -4,7 +4,7 @@
 //Inputs: Score, Team name, Player 1 name, Player 2 name
 //Outputs: Sorted csv file of high scores
 
-class high_score{
+class High_score{
 
 //Initialize tables  
 Table score_table;
@@ -22,7 +22,7 @@ String player2;
 
 boolean new_score_added = false;
 
-high_score(int score_my, String team_name_my, String player1_my, String player2_my ){
+High_score(int score_my, String team_name_my, String player1_my, String player2_my ){
   score = score_my;
   team_name = team_name_my;
   player1 = player1_my;

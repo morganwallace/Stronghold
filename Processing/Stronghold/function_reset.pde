@@ -17,6 +17,9 @@ void reset() {
   for (int i = 0; i < skeletons.length; i++) {
     skeletons[i].reset();
   }
+  
+  // Reset highscore
+  call_count = 0;
     
   // Set game into 'start' mode / show 'start' screen
   mode = 's';

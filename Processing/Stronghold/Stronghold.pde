@@ -42,7 +42,7 @@ int repairnumber = 1;
 ArrayList<Explosion> explosions;
 int explosionnumber = 1;
 Sync sync1, sync2;
-high_score high_score;
+High_score high_score;
 
 // Screen setup
 float screen_scale = 1.5;      // Scaling factor when drawing the screen
