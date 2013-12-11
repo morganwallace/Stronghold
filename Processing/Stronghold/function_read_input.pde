@@ -17,7 +17,7 @@ void read_input(){
   fill(255, 255, 255);
   
   // Display
-  text("Congratulations! \nYour High Score is: "+high_score, indent, offset);
+  text("Congratulations! \nYour High Score is: "+global_score, indent, offset);
   text("Team name", indent - 200, offset + 100);
   text(global_team, indent - 200, offset + 150);
   text("Player 1", indent, offset + 100);
