@@ -19,7 +19,7 @@ void reset() {
   }
   
   // Reset highscore
-  call_count = 0;
+  //call_count = 0;
     
   // Set game into 'start' mode / show 'start' screen
   mode = 's';

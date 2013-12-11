@@ -7,7 +7,7 @@
 
 void read_input(){
   PFont f;
-  f = createFont("Olde English",30,true);  
+  f = createFont("GaramondPremrPro-Disp",30,true);  
   float indent = width/2.5;
   float offset = height/2.5;
   
