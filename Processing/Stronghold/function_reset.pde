@@ -24,6 +24,10 @@ void reset() {
   global_typing = "";
   global_label = "Team Name: ";
   global_label2 = 'T';
+  global_score = 0;
+  global_team = "";
+  global_p1 = "";
+  global_p2 = "";
     
   // Set game into 'start' mode / show 'start' screen
   mode = 's';

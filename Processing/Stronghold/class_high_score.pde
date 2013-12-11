@@ -123,7 +123,7 @@ void display_score(){
  //Vertical offset
  float vertical_offset = height/2.5;
  //Font
- PFont f = createFont("Olde English", 30, true); 
+ PFont f = createFont("GaramondPremrPro-Disp", 30, true); 
  
  display_table = loadTable("high scores.csv", "header");
   
